@@ -3,25 +3,159 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Semanario Reconquista</title>
+<title>Semanario Digital - Reconquista y la Región</title>
 <style>
-body{font-family:Arial,sans-serif;max-width:800px;margin:auto;padding:15px;background:#f0f0f0}
-header{background:#b80000;color:white;padding:20px;text-align:center;border-radius:10px}
-article{background:white;padding:15px;margin:15px 0;border-radius:8px;box-shadow:0 2px 5px #ccc}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family: 'Georgia', serif; background:#f5f3ef; color:#222}
+.topbar{background:#111;color:white;padding:6px;text-align:center;font-size:12px;font-family:Arial}
+header{background:#b80000;color:white;padding:15px 10px;text-align:center;position:sticky;top:0;z-index:100}
+header h1{font-size:32px;letter-spacing:2px}
+header p{font-size:13px;margin-top:4px;font-family:Arial}
+nav{background:#fff;border-bottom:3px solid #b80000;display:flex;flex-wrap:wrap;justify-content:center;gap:5px;padding:8px;position:sticky;top:82px;z-index:99}
+nav button{border:1px solid #ddd;background:#fff;padding:8px 14px;border-radius:20px;cursor:pointer;font-weight:bold;font-family:Arial;transition:0.2s}
+nav button.active, nav button:hover{background:#b80000;color:white;border-color:#b80000}
+.container{max-width:1100px;margin:15px auto;display:grid;grid-template-columns:1fr 300px;gap:15px;padding:0 10px}
+@media(max-width:800px){.container{grid-template-columns:1fr}}
+main{display:flex;flex-direction:column;gap:15px}
+article{background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+article .cat{font-family:Arial;font-size:11px;font-weight:bold;padding:6px 10px;display:inline-block;color:white;margin:10px 0 0 15px;border-radius:3px}
+.cat-locales{background:#b80000}.cat-nacionales{background:#0d47a1}.cat-internacionales{background:#2e7d32}.cat-deportes{background:#ef6c00}.cat-policiales{background:#212121}
+article h2{padding:10px 15px 5px;font-size:22px;line-height:1.2}
+article .bajada{padding:0 15px;font-style:italic;color:#555;font-size:15px;border-left:3px solid #b80000;margin:5px 15px}
+article .meta{padding:5px 15px;font-size:12px;color:#888;font-family:Arial}
+article .contenido{padding:10px 15px 15px;font-size:16px;line-height:1.6}
+article .contenido::first-letter{font-size:42px;float:left;margin:0 6px 0 0;color:#b80000;font-weight:bold;line-height:1}
+article img{width:100%;height:auto;display:block}
+.sidebar{display:flex;flex-direction:column;gap:15px}
+.pub{background:white;border:2px dashed #b80000;border-radius:8px;padding:12px;text-align:center}
+.pub h3{font-family:Arial;color:#b80000;font-size:14px;margin-bottom:8px}
+.pub .box{background:#fff8e1;padding:15px;border-radius:6px;min-height:90px;display:flex;flex-direction:column;justify-content:center}
+.pub small{font-family:Arial;color:#777}
+footer{background:#111;color:#aaa;text-align:center;padding:20px;margin-top:20px;font-family:Arial;font-size:13px}
+.hidden{display:none !important}
+.btn-wp{background:#25D366;color:white;padding:10px;border-radius:6px;text-decoration:none;font-family:Arial;font-weight:bold;display:inline-block;margin-top:8px}
 </style>
 </head>
 <body>
+<div class="topbar">Reconquista, Santa Fe - Argentina | Hoy es <span id="fecha"></span> | Semanario Digital</div>
 <header>
-<h1>SEMANARIO RECONQUISTA</h1>
-<p>Reconquista, Santa Fe - Argentina</p>
+<h1>SEMANARIO DIGITAL</h1>
+<p>Noticias de Reconquista, la región, el país y el mundo</p>
 </header>
-<article>
-<h2>¡Bienvenidos!</h2>
-<p>El Semanario ya esta online. Aqui van las noticias de Reconquista.</p>
+<nav>
+<button class="active" onclick="filtrar('todos')">INICIO - TODAS</button>
+<button onclick="filtrar('locales')">LOCALES</button>
+<button onclick="filtrar('nacionales')">NACIONALES</button>
+<button onclick="filtrar('internacionales')">INTERNACIONALES</button>
+<button onclick="filtrar('deportes')">DEPORTES</button>
+<button onclick="filtrar('policiales')">POLICIALES</button>
+</nav>
+
+<div class="container">
+<main id="noticias">
+
+<article data-cat="locales">
+<span class="cat cat-locales">LOCALES</span>
+<h2>¡Bienvenidos al nuevo Semanario Digital!</h2>
+<div class="bajada">Este es el nuevo diseño con todas las secciones que pidió Mario: locales, nacionales, internacionales, deportes, policiales y espacio para comercios.</div>
+<div class="meta">Reconquista | Hoy</div>
+<img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800" alt="Reconquista">
+<div class="contenido">Aquí va la introducción de la noticia. Después el desarrollo completo. Al final la conclusión. Con letra capitular grande al inicio como en los diarios importantes. Usted puede borrar esta noticia y poner las suyas.</div>
 </article>
-<article>
-<h2>Noticia de prueba</h2>
-<p>Este es el comienzo del diario digital.</p>
+
+<article data-cat="nacionales">
+<span class="cat cat-nacionales">NACIONALES</span>
+<h2>Noticia Nacional de Ejemplo</h2>
+<div class="bajada">Bajada: resumen corto de 2 líneas que explica de qué trata la noticia nacional.</div>
+<div class="meta">Buenos Aires | Hoy</div>
+<div class="contenido">Introducción, desarrollo y conclusión. Reemplace este texto por una noticia real del país.</div>
 </article>
+
+<article data-cat="internacionales">
+<span class="cat cat-internacionales">INTERNACIONALES</span>
+<h2>Noticia Internacional de Ejemplo</h2>
+<div class="bajada">Lo que pasa en el mundo también llega a Reconquista.</div>
+<div class="meta">Internacional | Hoy</div>
+<div class="contenido">Espacio para noticias del mundo. Copie y pegue aquí.</div>
+</article>
+
+<article data-cat="deportes">
+<span class="cat cat-deportes">DEPORTES</span>
+<h2>Deportes de Reconquista y la Región</h2>
+<div class="bajada">Resultados del fin de semana y torneos locales.</div>
+<div class="meta">Deportes | Hoy</div>
+<img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800" alt="Deportes">
+<div class="contenido">Aquí van los deportes. Fútbol, básquet, hockey, pesca. Lo que le interese a la gente de la zona.</div>
+</article>
+
+<article data-cat="policiales">
+<span class="cat cat-policiales">POLICIALES</span>
+<h2>Policiales - Información de la Región</h2>
+<div class="bajada">Información oficial y chequeada de la zona.</div>
+<div class="meta">Policiales | Hoy</div>
+<div class="contenido">Espacio para policiales con responsabilidad periodística.</div>
+</article>
+
+</main>
+
+<div class="sidebar">
+<div class="pub">
+<h3>PROPAGANDA - NEGOCIO LOCAL 1</h3>
+<div class="box">
+<strong>Carnicería "El Buen Corte"</strong>
+<p>Ofertas de la semana</p>
+<p>Tel: 3482-XXXXXX</p>
+<a class="btn-wp" href="#">WhatsApp</a>
+</div>
+<small>¿Quiere su publicidad aquí? Contacte al Semanario</small>
+</div>
+
+<div class="pub">
+<h3>PROPAGANDA - NEGOCIO LOCAL 2</h3>
+<div class="box">
+<strong>Tu Logo Aquí</strong>
+<p>Alquiler de espacio publicitario</p>
+<p>Desde $5000 por semana</p>
+</div>
+<small>Espacio disponible</small>
+</div>
+
+<div class="pub">
+<h3>PROPAGANDA - NEGOCIO LOCAL 3</h3>
+<div class="box">
+<strong>Ferretería, Kiosco, Supermercado</strong>
+<p>Ponga aquí su comercio</p>
+</div>
+</div>
+
+<div class="pub" style="border-style:solid;background:#e8f5e9">
+<h3>CONTACTO SEMANARIO</h3>
+<div class="box" style="background:white">
+<p><strong>Mario - Director</strong></p>
+<p>Reconquista, Santa Fe</p>
+<p>Para publicar su negocio aquí</p>
+</div>
+</div>
+
+</div>
+</div>
+
+<footer>
+Semanario Digital © 2026 - Reconquista, Santa Fe, Argentina<br>
+Hecho por Mario | Todos los derechos reservados
+</footer>
+
+<script>
+document.getElementById('fecha').textContent = new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+function filtrar(cat){
+document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+event.target.classList.add('active');
+document.querySelectorAll('#noticias article').forEach(a=>{
+if(cat==='todos' || a.dataset.cat===cat) a.classList.remove('hidden');
+else a.classList.add('hidden');
+});
+window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
 </body>
 </html>
