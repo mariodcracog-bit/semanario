@@ -3,159 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Semanario Digital - Reconquista y la Región</title>
+<title>SD - SEMANARIO DIGITAL - Reconquista</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family: 'Georgia', serif; background:#f5f3ef; color:#222}
-.topbar{background:#111;color:white;padding:6px;text-align:center;font-size:12px;font-family:Arial}
-header{background:#b80000;color:white;padding:15px 10px;text-align:center;position:sticky;top:0;z-index:100}
-header h1{font-size:32px;letter-spacing:2px}
-header p{font-size:13px;margin-top:4px;font-family:Arial}
-nav{background:#fff;border-bottom:3px solid #b80000;display:flex;flex-wrap:wrap;justify-content:center;gap:5px;padding:8px;position:sticky;top:82px;z-index:99}
-nav button{border:1px solid #ddd;background:#fff;padding:8px 14px;border-radius:20px;cursor:pointer;font-weight:bold;font-family:Arial;transition:0.2s}
-nav button.active, nav button:hover{background:#b80000;color:white;border-color:#b80000}
-.container{max-width:1100px;margin:15px auto;display:grid;grid-template-columns:1fr 300px;gap:15px;padding:0 10px}
-@media(max-width:800px){.container{grid-template-columns:1fr}}
-main{display:flex;flex-direction:column;gap:15px}
-article{background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
-article .cat{font-family:Arial;font-size:11px;font-weight:bold;padding:6px 10px;display:inline-block;color:white;margin:10px 0 0 15px;border-radius:3px}
-.cat-locales{background:#b80000}.cat-nacionales{background:#0d47a1}.cat-internacionales{background:#2e7d32}.cat-deportes{background:#ef6c00}.cat-policiales{background:#212121}
-article h2{padding:10px 15px 5px;font-size:22px;line-height:1.2}
-article .bajada{padding:0 15px;font-style:italic;color:#555;font-size:15px;border-left:3px solid #b80000;margin:5px 15px}
-article .meta{padding:5px 15px;font-size:12px;color:#888;font-family:Arial}
-article .contenido{padding:10px 15px 15px;font-size:16px;line-height:1.6}
-article .contenido::first-letter{font-size:42px;float:left;margin:0 6px 0 0;color:#b80000;font-weight:bold;line-height:1}
-article img{width:100%;height:auto;display:block}
-.sidebar{display:flex;flex-direction:column;gap:15px}
-.pub{background:white;border:2px dashed #b80000;border-radius:8px;padding:12px;text-align:center}
-.pub h3{font-family:Arial;color:#b80000;font-size:14px;margin-bottom:8px}
-.pub .box{background:#fff8e1;padding:15px;border-radius:6px;min-height:90px;display:flex;flex-direction:column;justify-content:center}
-.pub small{font-family:Arial;color:#777}
-footer{background:#111;color:#aaa;text-align:center;padding:20px;margin-top:20px;font-family:Arial;font-size:13px}
-.hidden{display:none !important}
-.btn-wp{background:#25D366;color:white;padding:10px;border-radius:6px;text-decoration:none;font-family:Arial;font-weight:bold;display:inline-block;margin-top:8px}
+body{font-family:Arial,sans-serif;background:#f4f4f4}
+header{background:#b80000;color:white;padding:18px;text-align:center}
+header h1{font-size:32px}header h1 span{background:white;color:#b80000;padding:2px 8px;border-radius:4px;margin-right:6px}
+nav{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+nav button{background:#fff;color:#b80000;border:none;padding:7px 12px;font-weight:bold;border-radius:4px}
+nav button.active{background:#222;color:#fff}
+.top-snap{background:#FFFC00;color:#000;text-align:center;padding:10px;font-weight:900}
+.container{max-width:1100px;margin:auto;display:grid;grid-template-columns:1fr 320px;gap:16px;padding:14px}
+.main{background:white;border-radius:8px;padding:12px}
+.side{background:white;border:2px solid #FFFC00;border-radius:8px;padding:16px;text-align:center}
+.btn-snap{background:#FFFC00;color:#000;padding:10px 18px;border-radius:24px;font-weight:900;text-decoration:none;display:inline-block;margin-top:8px}
 </style>
 </head>
 <body>
-<div class="topbar">Reconquista, Santa Fe - Argentina | Hoy es <span id="fecha"></span> | Semanario Digital</div>
+<div class="top-snap">👻 Seguinos en Snapchat: mariodante2026 - Sacamos WhatsApp</div>
 <header>
-<h1>SEMANARIO DIGITAL</h1>
-<p>Noticias de Reconquista, la región, el país y el mundo</p>
+<h1><span>SD</span>SEMANARIO DIGITAL</h1>
+<p>Reconquista y el Mundo - Sin WhatsApp, con Snapchat</p>
+<div style="margin-top:12px">
+<a class="btn-snap" href="https://www.snapchat.com/add/mariodante2026" target="_blank">👻 ABRIR SNAPCHAT</a>
+</div>
+<nav id="menu"></nav>
 </header>
-<nav>
-<button class="active" onclick="filtrar('todos')">INICIO - TODAS</button>
-<button onclick="filtrar('locales')">LOCALES</button>
-<button onclick="filtrar('nacionales')">NACIONALES</button>
-<button onclick="filtrar('internacionales')">INTERNACIONALES</button>
-<button onclick="filtrar('deportes')">DEPORTES</button>
-<button onclick="filtrar('policiales')">POLICIALES</button>
-</nav>
-
-<div class="container">
-<main id="noticias">
-
-<article data-cat="locales">
-<span class="cat cat-locales">LOCALES</span>
-<h2>¡Bienvenidos al nuevo Semanario Digital!</h2>
-<div class="bajada">Este es el nuevo diseño con todas las secciones que pidió Mario: locales, nacionales, internacionales, deportes, policiales y espacio para comercios.</div>
-<div class="meta">Reconquista | Hoy</div>
-<img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800" alt="Reconquista">
-<div class="contenido">Aquí va la introducción de la noticia. Después el desarrollo completo. Al final la conclusión. Con letra capitular grande al inicio como en los diarios importantes. Usted puede borrar esta noticia y poner las suyas.</div>
-</article>
-
-<article data-cat="nacionales">
-<span class="cat cat-nacionales">NACIONALES</span>
-<h2>Noticia Nacional de Ejemplo</h2>
-<div class="bajada">Bajada: resumen corto de 2 líneas que explica de qué trata la noticia nacional.</div>
-<div class="meta">Buenos Aires | Hoy</div>
-<div class="contenido">Introducción, desarrollo y conclusión. Reemplace este texto por una noticia real del país.</div>
-</article>
-
-<article data-cat="internacionales">
-<span class="cat cat-internacionales">INTERNACIONALES</span>
-<h2>Noticia Internacional de Ejemplo</h2>
-<div class="bajada">Lo que pasa en el mundo también llega a Reconquista.</div>
-<div class="meta">Internacional | Hoy</div>
-<div class="contenido">Espacio para noticias del mundo. Copie y pegue aquí.</div>
-</article>
-
-<article data-cat="deportes">
-<span class="cat cat-deportes">DEPORTES</span>
-<h2>Deportes de Reconquista y la Región</h2>
-<div class="bajada">Resultados del fin de semana y torneos locales.</div>
-<div class="meta">Deportes | Hoy</div>
-<img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800" alt="Deportes">
-<div class="contenido">Aquí van los deportes. Fútbol, básquet, hockey, pesca. Lo que le interese a la gente de la zona.</div>
-</article>
-
-<article data-cat="policiales">
-<span class="cat cat-policiales">POLICIALES</span>
-<h2>Policiales - Información de la Región</h2>
-<div class="bajada">Información oficial y chequeada de la zona.</div>
-<div class="meta">Policiales | Hoy</div>
-<div class="contenido">Espacio para policiales con responsabilidad periodística.</div>
-</article>
-
-</main>
-
+<div class="container" id="vistaPublico">
+<div class="main" id="listaNoticias"></div>
 <div class="sidebar">
-<div class="pub">
-<h3>PROPAGANDA - NEGOCIO LOCAL 1</h3>
-<div class="box">
-<strong>Carnicería "El Buen Corte"</strong>
-<p>Ofertas de la semana</p>
-<p>Tel: 3482-XXXXXX</p>
-<a class="btn-wp" href="#">WhatsApp</a>
-</div>
-<small>¿Quiere su publicidad aquí? Contacte al Semanario</small>
-</div>
-
-<div class="pub">
-<h3>PROPAGANDA - NEGOCIO LOCAL 2</h3>
-<div class="box">
-<strong>Tu Logo Aquí</strong>
-<p>Alquiler de espacio publicitario</p>
-<p>Desde $5000 por semana</p>
-</div>
-<small>Espacio disponible</small>
-</div>
-
-<div class="pub">
-<h3>PROPAGANDA - NEGOCIO LOCAL 3</h3>
-<div class="box">
-<strong>Ferretería, Kiosco, Supermercado</strong>
-<p>Ponga aquí su comercio</p>
+<div class="side"><h3>👻 SNAPCHAT</h3><p style="font-size:40px">👻</p><p style="font-weight:bold;font-size:18px">mariodante2026</p><p>Agreganos</p><a class="btn-snap" href="https://www.snapchat.com/add/mariodante2026" target="_blank">Agregar</a></div>
+<div class="side" style="margin-top:12px"><h3>PUBLICIDAD LOCAL</h3><p>Su aviso aquí</p></div>
+<a style="display:block;text-align:center;margin-top:20px;background:#222;color:white;padding:10px;border-radius:6px;text-decoration:none;font-weight:bold" href="#" onclick="mostrarAdmin();return false;">+ PUBLICAR NOTICIA (ADMIN)</a>
 </div>
 </div>
-
-<div class="pub" style="border-style:solid;background:#e8f5e9">
-<h3>CONTACTO SEMANARIO</h3>
-<div class="box" style="background:white">
-<p><strong>Mario - Director</strong></p>
-<p>Reconquista, Santa Fe</p>
-<p>Para publicar su negocio aquí</p>
+<div id="adminPanel" style="display:none;max-width:600px;margin:auto;background:white;padding:14px;border-radius:8px">
+<h2 style="background:#b80000;color:white;padding:10px;border-radius:6px;text-align:center">ADMIN - Semanario Digital</h2>
+<label>Titulo</label><input id="a_titulo" style="width:100%;padding:9px;margin:6px 0 12px;border:1px solid #ccc">
+<label>Bajada</label><textarea id="a_bajada" rows="2" style="width:100%"></textarea>
+<label>Categoria</label><select id="a_cat" style="width:100%"><option>Locales</option><option>Nacionales</option><option>Internacionales</option><option>Deportes</option><option>Policiales</option></select>
+<label>Foto (opcional)</label><input id="a_foto" style="width:100%">
+<label>Introduccion</label><textarea id="a_intro" rows="3" style="width:100%"></textarea>
+<label>Desarrollo</label><textarea id="a_desa" rows="5" style="width:100%"></textarea>
+<label>Conclusion</label><textarea id="a_conc" rows="3" style="width:100%"></textarea>
+<button style="background:#b80000;color:white;border:none;padding:12px;width:100%;border-radius:6px;font-weight:bold;margin-top:10px" onclick="publicar()">PUBLICAR AHORA</button>
+<a href="#" onclick="verComoPublico();return false;" style="display:block;text-align:center;margin-top:10px">Volver al diario</a>
 </div>
-</div>
-
-</div>
-</div>
-
-<footer>
-Semanario Digital © 2026 - Reconquista, Santa Fe, Argentina<br>
-Hecho por Mario | Todos los derechos reservados
-</footer>
-
 <script>
-document.getElementById('fecha').textContent = new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-function filtrar(cat){
-document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-event.target.classList.add('active');
-document.querySelectorAll('#noticias article').forEach(a=>{
-if(cat==='todos' || a.dataset.cat===cat) a.classList.remove('hidden');
-else a.classList.add('hidden');
-});
-window.scrollTo({top:0,behavior:'smooth'});
-}
+const CATS=["INICIO","Locales","Nacionales","Internacionales","Deportes","Policiales"];let filtro="INICIO";
+const menu=document.getElementById('menu');CATS.forEach(c=>{let b=document.createElement('button');b.innerText=c;if(c===filtro)b.className='active';b.onclick=()=>{filtro=c;document.querySelectorAll('nav button').forEach(x=>x.className='');b.className='active';render();};menu.appendChild(b);});
+function getNoticias(){try{return JSON.parse(localStorage.getItem('sd-noticias')||'[]')}catch(e){return []}}
+function saveNoticias(a){localStorage.setItem('sd-noticias',JSON.stringify(a))}
+function render(){let n=getNoticias();let f=filtro==="INICIO"?n:n.filter(x=>x.categoria===filtro);let c=document.getElementById('listaNoticias');if(f.length===0){c.innerHTML='<div style="text-align:center;padding:40px"><h2>Bienvenido a su Semanario Digital</h2><p>Ya sin WhatsApp, ahora con Snapchat 👻</p><p>Toque abajo PUBLICAR NOTICIA para empezar</p></div>';return}let h='';f.forEach(x=>{h+='<article style="border-bottom:1px solid #ddd;padding:14px 0"><span style="background:#b80000;color:white;font-size:11px;padding:3px 8px">'+x.categoria+'</span><h2 style="margin:8px 0">'+x.titulo+'</h2><div style="font-style:italic;border-left:4px solid #b80000;padding-left:8px">'+x.bajada+'</div><div style="margin-top:10px">'+x.introduccion+'<br><br><b>Desarrollo:</b> '+x.desarrollo+'<br><br><b>Conclusion:</b> '+x.conclusion+'<br><small>'+x.fecha+'</small></div></article>';});c.innerHTML=h;}
+function mostrarAdmin(){document.getElementById('vistaPublico').style.display='none';document.getElementById('adminPanel').style.display='block';}
+function verComoPublico(){document.getElementById('adminPanel').style.display='none';document.getElementById('vistaPublico').style.display='grid';render();}
+function publicar(){let t=document.getElementById('a_titulo').value.trim();if(!t){alert('Ponga titulo');return}let o={id:Date.now().toString(),titulo:t,bajada:document.getElementById('a_bajada').value,categoria:document.getElementById('a_cat').value,foto:document.getElementById('a_foto').value,introduccion:document.getElementById('a_intro').value,desarrollo:document.getElementById('a_desa').value,conclusion:document.getElementById('a_conc').value,fecha:new Date().toLocaleDateString('es-AR')};let p=getNoticias();p.unshift(o);saveNoticias(p);alert('¡Publicado!');verComoPublico();}
+render();
 </script>
 </body>
 </html>
