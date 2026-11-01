@@ -1,0 +1,8 @@
+
+<!doctype html><meta charset=utf-8><title>A</title><style>body{font:16px Arial;padding:10px;max-width:600px;margin:auto}.b{display:flex;flex-wrap:wrap;gap:4px;background:#900;padding:6px}.b button{border:0;background:#fff;padding:6px 10px;border-radius:12px}.s{background:yellow!important}input,textarea{width:100%;padding:8px;box-sizing:border-box;margin-top:8px}</style><h3>ADMIN - 6 ventanas</h3><div class=b><button id=INICIO class=s onclick="c=this.id;S()">INICIO</button><button id=LOCALES onclick="c=this.id;S()">LOCALES</button><button id=NACIONALES onclick="c=this.id;S()">NACIONALES</button><button id=INTERNACIONALES onclick="c=this.id;S()">INTER</button><button id=DEPORTES onclick="c=this.id;S()">DEPORTES</button><button id=POLICIALES onclick="c=this.id;S()">POLICIALES</button></div><input id=t placeholder=TITULO><textarea id=x placeholder=NOTICIA rows=4></textarea><button onclick="P()" style="background:#c00;color:#fff;width:100%;padding:12px;margin-top:8px;border:0">PUBLICAR</button><p id=o style=display:none;background:#cfc;padding:6px>OK!</p><script>c="INICIO";function S(){document.querySelectorAll("button").forEach(b=>b.classList.remove("s"));document.getElementById(c).classList.add("s")}function P(){if(!t.value||!x.value){alert(1);return}let n=JSON.parse(localStorage.semanario_noticias||"[]");n.push({titulo:t.value,categoria:c,texto:x.value,fecha:Date()});localStorage.semanario_noticias=JSON.stringify(n);o.style.display="block";t.value=x.value=""}</script>
+
+Tiene que empezar con <!doctype y terminar con </script>
+
+Cuando lo vea completo, toque el verde Commit changes... y después Commit changes otra vez.
+
+Mándeme la foto de arriba después de pegarlo para ver que dice <!doctype al principio.
