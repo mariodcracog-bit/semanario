@@ -1,1 +1,48 @@
-<!doctype html><html lang=es><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>SD SEMANARIO DIGITAL</title><style>body{margin:0;font-family:Arial;background:#f0f0f0}header{background:#900;color:#fff;padding:8px;text-align:center}.btns{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:6px}.btns button{border:0;background:#fff;color:#900;padding:6px 10px;border-radius:12px;font-weight:bold}main{max-width:800px;margin:auto;padding:10px}.card{background:#fff;padding:12px;margin-bottom:10px;border-radius:8px;box-shadow:0 1px 3px #0002}.card img{width:100%;border-radius:6px;margin-top:8px;max-height:500px;object-fit:cover}.cat{background:#900;color:#fff;padding:2px 8px;border-radius:10px;font-size:12px}</style><header><div style="font-size:24px;font-weight:bold">SD SEMANARIO DIGITAL</div><div>Reconquista y el Mundo</div><div class=btns><button onclick="M('INICIO')">INICIO</button><button onclick="M('LOCALES')">Locales</button><button onclick="M('NACIONALES')">Nacionales</button><button onclick="M('INTERNACIONALES')">Inter</button><button onclick="M('DEPORTES')">Deportes</button><button onclick="M('POLICIALES')">Policiales</button></div></header><main id=main></main><script>let cat='INICIO';function M(c){cat=c;R()}function R(){let n=[];try{n=JSON.parse(localStorage.getItem("semanario_noticias")||"[]")}catch(e){}let m=document.getElementById("main");m.innerHTML="";let f=cat=='INICIO'?n:n.filter(x=>x.categoria==cat);if(f.length==0){m.innerHTML='<div class=card><h3>Bienvenido a su Semanario Digital</h3><p>Toque arriba para ver noticias. Publique en admin.html</p></div>';return}f.forEach(o=>{let d=document.createElement("div");d.className="card";d.innerHTML='<span class=cat>'+o.categoria+'</span> <small>'+(o.fecha||'')+'</small><h3>'+o.titulo+'</h3><p>'+o.texto.replace(/\n/g,'<br>')+'</p>'+(o.foto?'<img src="'+o.foto+'">':'');m.appendChild(d)})}R()</script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SD SEMANARIO DIGITAL</title>
+<style>
+body{margin:0;font-family:Arial;background:#f0f0f0}
+.header{background:#a00;color:white;text-align:center;padding:12px;position:sticky;top:0}
+.header h1{margin:0;font-size:22px}
+.btns{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:8px}
+.btns button{border:none;background:white;color:#a00;font-weight:bold;padding:7px 14px;border-radius:20px}
+.btns button.active{background:#222;color:white}
+.container{padding:10px;max-width:800px;margin:auto}
+.card{background:white;border-radius:10px;padding:14px;margin-bottom:12px}
+.card h2{color:#a00;margin:0 0 8px;font-size:18px}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>SD SEMANARIO DIGITAL</h1>
+<p>Reconquista y el Mundo</p>
+<div class="btns">
+<button onclick="filtrar('INICIO')" id="b-INICIO" class="active">INICIO</button>
+<button onclick="filtrar('Locales')" id="b-Locales">Locales</button>
+<button onclick="filtrar('Nacionales')" id="b-Nacionales">Nacionales</button>
+<button onclick="filtrar('Inter')" id="b-Inter">Inter</button>
+<button onclick="filtrar('Deportes')" id="b-Deportes">Deportes</button>
+<button onclick="filtrar('Policiales')" id="b-Policiales">Policiales</button>
+</div>
+</div>
+<div class="container" id="contenedor"></div>
+<script>
+const KEY='noticias_semanario'; let filtroActual='INICIO';
+const historiaFija={titulo:'Historia de Reconquista - La Perla del Norte',texto:`Reconquista tiene dos fundaciones. La primera en 1748, con la Reduccion jesuitica de San Jeronimo del Rey sobre el Arroyo El Rey.
+
+La segunda, definitiva, el 27 de abril de 1872, cuando el Coronel Manuel Obligado izo la bandera argentina en Plaza 25 de Mayo.
+
+El 24 de junio de 1872 el fortin fue atacado por 500 originarios, dando origen al primer cementerio. El 22 de noviembre de 1872, por Decreto del gobernador Simon de Iriondo, se oficializo la creacion del pueblo con el nombre de Reconquista.
+
+El crecimiento llego con el puerto en 1887 y el ferrocarril en 1890, mas la inmigracion europea. En 1921, con 10.205 habitantes, fue elevada a ciudad. Hoy es polo del norte santafesino.`,fecha:'1872 - 2026'};
+function cargar(){try{let d=localStorage.getItem(KEY);if(!d)d=localStorage.getItem('noticias')||'[]';let a=JSON.parse(d);return Array.isArray(a)?a:[]}catch{return[]}}
+function mostrar(){const c=document.getElementById('contenedor');let noticias=cargar();if(noticias.length===0){c.innerHTML=`<div class="card"><h2>${historiaFija.titulo}</h2><small>${historiaFija.fecha}</small>${historiaFija.texto.split('\n\n').map(p=>'<p>'+p+'</p>').join('')}<p><i>Fuente: Museo Historico Municipal</i></p></div>`;return}let f=filtroActual==='INICIO'?noticias:noticias.filter(n=>(n.categoria||'').toLowerCase().includes(filtroActual.toLowerCase()));if(f.length===0){c.innerHTML='<div class="card"><p>No hay noticias en '+filtroActual+'</p></div>';return}c.innerHTML=f.map(n=>`<div class="card"><h2>${n.titulo}</h2><small>${n.fecha||''}</small><p>${(n.texto||'').replace(/\n/g,'<br>')}</p></div>`).join('')}
+function filtrar(cat){filtroActual=cat;document.querySelectorAll('.btns button').forEach(b=>b.classList.remove('active'));document.getElementById('b-'+cat).classList.add('active');mostrar()}
+window.onload=mostrar;
+</script>
+</body>
+</html>
