@@ -1,1 +1,33 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Admin</title><style>body{font-family:system-ui;padding:12px;background:#f5f5f5}.card{background:#fff;padding:14px;border-radius:10px;margin-bottom:12px}input,textarea,select{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:8px}button{padding:12px;border:0;border-radius:8px;font-weight:bold}.btn-green{background:#16a34a;color:#fff;width:100%}.btn-red{background:#dc2626;color:#fff}.lista-noticia{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee}</style></head><body><h2>Admin Semanario</h2><div class="card"><h3>Nueva</h3><input id="titulo" placeholder="Titulo"><textarea id="contenido" placeholder="Texto"></textarea><input id="imagen" placeholder="URL imagen"><select id="categoria"><option>Locales</option><option>Policiales</option><option>Deportes</option></select><button class="btn-green" onclick="guardar()">PUBLICAR</button></div><div class="card"><h3>Noticias - BORRAR solo 1</h3><div id="lista">Cargando...</div></div><script>let noticias=[];async function cargar(){try{let r=await fetch('/noticias.json?t='+Date.now());noticias=await r.json()}catch(e){noticias=JSON.parse(localStorage.getItem('noticias_local')||'[]')}render()}function render(){let c=document.getElementById('lista');if(noticias.length==0){c.innerHTML='No hay';return}c.innerHTML=noticias.map((n,i)=>`<div class="lista-noticia"><div><b>${n.titulo||''}</b></div><button class="btn-red" onclick="borrarUna(${i})">BORRAR ESTA</button></div>`).join('')}async function guardar(){let nueva={id:Date.now(),titulo:titulo.value,contenido:contenido.value,imagen:imagen.value,categoria:categoria.value,fecha:new Date().toISOString()};try{await fetch('/api/noticias',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(nueva)})}catch(e){}noticias.unshift(nueva);localStorage.setItem('noticias_local',JSON.stringify(noticias));render()}async function borrarUna(i){let n=noticias[i];if(!confirm('Borrar '+n.titulo+'?'))return;try{await fetch('/api/noticias?id='+n.id,{method:'DELETE'})}catch(e){}noticias.splice(i,1);localStorage.setItem('noticias_local',JSON.stringify(noticias));render()}cargar()</script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Semanario</title>
+<style>
+body{font-family:Arial;padding:15px;background:#f5f5f5}
+input,textarea,select{width:100%;padding:10px;margin:6px 0;box-sizing:border-box}
+button{padding:10px 20px;background:#a00;color:white;border:none;border-radius:6px;font-weight:bold}
+.card{background:white;padding:10px;margin:8px 0;border-radius:8px}
+</style>
+</head>
+<body>
+<h2>ADMIN Semanario Digital</h2>
+<input id="titulo" placeholder="Titulo de la noticia">
+<select id="categoria"><option>Locales</option><option>Nacionales</option><option>Inter</option><option>Deportes</option><option>Policiales</option></select>
+<textarea id="texto" rows="6" placeholder="Escriba el texto de la noticia aqui..."></textarea>
+<button onclick="publicar()">PUBLICAR NOTICIA</button>
+<button onclick="borrarTodo()" style="background:#333;margin-left:10px">Borrar todo y mostrar solo Historia</button>
+<div id="lista"></div>
+<script>
+const KEY='noticias_semanario';
+function cargar(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
+function guardar(a){localStorage.setItem(KEY,JSON.stringify(a));localStorage.setItem('noticias',JSON.stringify(a))}
+function publicar(){let t=document.getElementById('titulo').value;let tx=document.getElementById('texto').value;let c=document.getElementById('categoria').value;if(!t||!tx){alert('Falta titulo o texto');return}let a=cargar();a.unshift({titulo:t,texto:tx,categoria:c,fecha:new Date().toLocaleDateString()});guardar(a);document.getElementById('titulo').value='';document.getElementById('texto').value='';mostrar();alert('Noticia publicada! Ahora vaya a la pagina principal')}
+function borrar(id){let a=cargar();a.splice(id,1);guardar(a);mostrar()}
+function borrarTodo(){if(confirm('Borra todo y deja solo la Historia?')){localStorage.removeItem(KEY);localStorage.removeItem('noticias');mostrar();alert('Ahora solo se vera la Historia fija')}}
+function mostrar(){let a=cargar();let d=document.getElementById('lista');if(a.length==0){d.innerHTML='<p>No hay noticias guardadas. Se vera la Historia fija en la pagina principal.</p>';return}d.innerHTML=a.map((n,i)=>`<div class="card"><b>${n.titulo}</b> - ${n.categoria}<br><small>${n.fecha}</small><p>${n.texto.substring(0,120)}...</p><button onclick="borrar(${i})">Borrar esta</button></div>`).join('')}
+window.onload=mostrar;
+</script>
+</body>
+</html>
