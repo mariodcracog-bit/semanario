@@ -12,7 +12,7 @@ button{padding:10px 20px;background:#a00;color:white;border:none;border-radius:6
 </style>
 </head>
 <body>
-  <script>if(prompt("Clave de Mario:")!=="Mario1960"){document.body.innerHTML="<h2>Acceso denegado</h2>";throw new Error("x");}</script>
+  <div id="candado" style="position:fixed;inset:0;background:white;z-index:9999;padding:20px;text-align:center"><h2>Oficina de Mario</h2><input type="password" id="clave" placeholder="Escriba su clave"><br><br><button onclick="if(document.getElementById('clave').value==='Mario1960'){document.getElementById('candado').remove()}else{alert('Clave incorrecta')}">INGRESAR</button></div>
 <h2>ADMIN Semanario Digital</h2>
 <input id="titulo" placeholder="Titulo de la noticia">
 <select id="categoria"><option>Locales</option><option>Nacionales</option><option>Inter</option><option>Deportes</option><option>Policiales</option></select>
