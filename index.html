@@ -1,1 +1,61 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SD Semanario Digital</title><style>body{margin:0;font-family:Arial;background:#eee}header{background:#b91c1c;color:#fff;padding:10px;text-align:center;position:sticky;top:0}h1{margin:0;font-size:22px}.menu{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}.menu button{border:0;border-radius:20px;padding:8px 14px;font-weight:700;background:#fff;color:#b91c1c}.menu button.active{background:#222;color:#fff}.info{font-size:12px;display:flex;justify-content:space-between;padding:8px 10px}.card{background:#fff;margin:10px;border-radius:12px;padding:14px;box-shadow:0 2px 3px #0002}.tag{background:#b91c1c;color:#fff;padding:3px 8px;border-radius:10px;font-size:12px}.historia{border-left:5px solid #b91c1c;background:#fffbe6}</style></head><body><header><h1>SD SEMANARIO DIGITAL</h1><div>Reconquista y el Mundo</div><div class="menu"><button class="active" onclick="filtrar('INICIO')">INICIO</button><button onclick="filtrar('Locales')">Locales</button><button onclick="filtrar('Nacionales')">Nacionales</button><button onclick="filtrar('Inter')">Inter</button><button onclick="filtrar('Deportes')">Deportes</button><button onclick="filtrar('Policiales')">Policiales</button></div><div class="info"><span id="fecha"></span><span id="clima">Reconquista 26C</span></div></header><div id="contenido"></div><script>let filtro='INICIO';document.getElementById('fecha').textContent=new Date().toLocaleDateString('es-AR');function filtrar(c){filtro=c;var bs=document.querySelectorAll('.menu button');for(var i=0;i<bs.length;i++){bs[i].classList.toggle('active',bs[i].textContent===c);}render();}function render(){var div=document.getElementById('contenido');var notas=[];try{notas=JSON.parse(localStorage.getItem('semanario_noticias')||'[]');}catch(e){}var html='';var f=[];if(filtro==='INICIO'){f=notas;}else{for(var i=0;i<notas.length;i++){if(notas[i].cat===filtro){f.push(notas[i]);}}}if(f.length===0&&filtro==='INICIO'){html+='<div class="card"><p>Estoy en periodo de prueba, por eso que edito contenido pero despues surge un problema se borra todo. Cuando no haya mas errores voy a empezar a publicar. Ademas tengo que hacer todo yo solo para crear este diario, como decia un amigo espanol. Si no lo haces tu no lo hago yo no lo hace nadie. Es asi de facil gente.</p><small>2/11/2026</small></div>';}for(var j=0;j<f.length;j++){html+='<div class="card"><span class="tag">'+f[j].cat+'</span><h3>'+f[j].titulo+'</h3><p style="white-space:pre-line">'+f[j].texto+'</p><small>'+f[j].fecha+'</small></div>';}html+='<div class="card historia"><h3>Nuestra Historia - Reconquista</h3><p>Fundada el 27 de abril de 1872 por el Coronel Manuel Obligado. Capital del Norte Santafesino. Esta historia es FIJA y no se borra nunca.</p></div>';div.innerHTML=html;}render();fetch('https://api.open-meteo.com/v1/forecast?latitude=-29.14&longitude=-59.64&current=temperature_2m&timezone=America/Argentina/Buenos_Aires').then(function(r){return r.json();}).then(function(d){document.getElementById('clima').textContent='Reconquista '+Math.round(d.current.temperature_2m)+'C';}).catch(function(){});</script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SD SEMANARIO DIGITAL - Reconquista y el Mundo</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#fff}
+header{background:#fff;border-bottom:4px solid #b91c1c;padding:15px;text-align:center}
+header h1{margin:0;font-size:30px} header h1 span{background:#b91c1c;color:#fff;padding:2px 8px}
+nav{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;background:#fff;padding:10px}
+nav button{padding:8px 12px;font-weight:bold;border:none;cursor:pointer;background:#e5e7eb}
+nav button.activo{background:#b91c1c;color:#fff}
+.grandes{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:10px}
+.grandes button{padding:12px 16px;font-weight:bold;border:none;border-radius:8px;font-size:15px}
+.card{max-width:800px;margin:12px auto;padding:15px;border:1px solid #eee;border-radius:8px}
+.card img{width:100%;border-radius:8px}
+.bajada{font-style:italic;border-left:4px solid #b91c1c;padding-left:10px;color:#444}
+.form{max-width:800px;margin:15px auto;background:#f9fafb;padding:15px;border-radius:8px}
+input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:6px;box-sizing:border-box}
+.btn{width:100%;background:#b91c1c;color:#fff;padding:14px;font-weight:bold;border:none;border-radius:8px;font-size:17px}
+.etiqueta{background:#b91c1c;color:#fff;padding:3px 8px;font-size:12px;border-radius:4px}
+.pub{background:#fef9c3;border:2px dashed #eab308;padding:15px;text-align:center;margin:12px auto;max-width:800px;border-radius:8px}
+</style>
+</head>
+<body>
+<header><h1><span>SD</span> SEMANARIO DIGITAL</h1><p>Noticias de Reconquista, la región y el mundo</p></header>
+<div class="pub">PUBLICIDAD SUPERIOR 728x90 - Tu publicidad aquí</div>
+<nav id="menu"></nav>
+<div class="grandes">
+<button onclick="filtrar('Fotografías')" style="background:black;color:white">📷 FOTOGRAFÍA</button>
+<button onclick="filtrar('Publicidad Local')" style="background:#facc15">📢 PUBLICIDAD LOCAL</button>
+<button onclick="filtrar('Avisos Clasificados')" style="background:#16a34a;color:white">📋 AVISOS CLASIFICADOS</button>
+</div>
+<div class="form">
+<h2>Publicar nueva noticia</h2>
+<input id="titulo" placeholder="Título de la nota">
+<textarea id="bajada" placeholder="Bajada / Resumen en 1 o 2 líneas"></textarea>
+<select id="categoria"><option>Locales</option><option>Regionales</option><option>Deportes</option><option>Fotografías</option><option>Internacionales</option><option>Publicidad Local</option><option>Avisos Clasificados</option></select>
+<input type="file" id="fotoInput" accept="image/*"><p id="vistaFoto" style="font-size:13px;color:green"></p>
+<textarea id="intro" placeholder="Introducción"></textarea>
+<textarea id="desarrollo" placeholder="Desarrollo"></textarea>
+<textarea id="conclusion" placeholder="Conclusión"></textarea>
+<button class="btn" onclick="publicar()">PUBLICAR AHORA</button>
+<p style="text-align:center;font-size:13px">Esto NO borra lo anterior. Se suma a lo que ya está publicado.</p>
+</div>
+<div id="lista"></div>
+<script>
+const CATS=["INICIO","Locales","Regionales","Deportes","Fotografías","Internacionales","Publicidad Local","Avisos Clasificados"];
+let filtro="INICIO"; let fotoBase64="";
+const menu=document.getElementById('menu');
+CATS.forEach(c=>{let b=document.createElement('button');b.innerText=c;b.onclick=()=>filtrar(c);if(c===filtro)b.classList.add('activo');menu.appendChild(b);});
+function filtrar(c){filtro=c;[...menu.children].forEach(b=>b.classList.toggle('activo',b.innerText===c));mostrar();}
+document.getElementById('fotoInput').addEventListener('change',function(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{fotoBase64=r.result;document.getElementById('vistaFoto').innerText="✅ Foto lista";};r.readAsDataURL(f);});
+function getNoticias(){return JSON.parse(localStorage.getItem('semanario-digital-noticias')||'[]');}
+function mostrar(){let noticias=getNoticias();let f=filtro==="INICIO"?noticias:noticias.filter(n=>n.categoria===filtro);let div=document.getElementById('lista');if(f.length===0){div.innerHTML="<p style='text-align:center'>Todavía no hay noticias en "+filtro+". Publique arriba.</p>";return;}div.innerHTML=f.map(n=>`<div class="card"><span class="etiqueta">${n.categoria}</span> <small>${n.fecha||''}</small><h2>${n.titulo}</h2><p class="bajada">${n.bajada||''}</p>${n.foto?`<img src="${n.foto}">`:''}<p><b>Introducción:</b> ${n.introduccion||''}</p><p><b>Desarrollo:</b> ${n.desarrollo||''}</p><p><b>Conclusión:</b> ${n.conclusion||''}</p></div>`).join('');}
+function publicar(){let n={id:Date.now(),titulo:document.getElementById('titulo').value,bajada:document.getElementById('bajada').value,categoria:document.getElementById('categoria').value,foto:fotoBase64,introduccion:document.getElementById('intro').value,desarrollo:document.getElementById('desarrollo').value,conclusion:document.getElementById('conclusion').value,fecha:new Date().toLocaleDateString('es-AR')};if(!n.titulo){alert('Ponga el título primero');return;}let prev=getNoticias();prev.unshift(n);localStorage.setItem('semanario-digital-noticias',JSON.stringify(prev));alert('¡Publicado en '+n.categoria+'!');mostrar();}
+mostrar();
+</script>
+</body>
+</html>
