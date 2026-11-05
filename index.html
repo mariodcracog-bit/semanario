@@ -46,7 +46,7 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc
 </div>
 <div id="lista"></div>
 <script>
-const CATS=["INICIO","Locales","Regionales","Deportes","Fotografías","Internacionales","Publicidad Local","Avisos Clasificados"];
+const CATS=["INICIO","Locales","Regionales","Deportes","Internacionales","Avisos Clasificados"];
 let filtro="INICIO"; let fotoBase64="";
 const menu=document.getElementById('menu');
 CATS.forEach(c=>{let b=document.createElement('button');b.innerText=c;b.onclick=()=>filtrar(c);if(c===filtro)b.classList.add('activo');menu.appendChild(b);});
