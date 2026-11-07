@@ -45,6 +45,10 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc
 <p style="text-align:center;font-size:13px">Esto NO borra lo anterior. Se suma a lo que ya está publicado.</p>
 </div>
 <div id="lista"></div>
+  <h2 style="text-align:center">📰 AVISOS CLASIFICADOS</h2>
+<div id="avisos"></div>
+<h2 style="text-align:center">📢 PUBLICIDAD LOCAL</h2>
+<div id="publi"></div>
 <script>
 const CATS=["INICIO","Locales","Regionales","Deportes","Internacionales","Avisos Clasificados"];
 let filtro="INICIO"; let fotoBase64="";
@@ -55,7 +59,8 @@ document.getElementById('fotoInput').addEventListener('change',function(e){let f
 function getNoticias(){return JSON.parse(localStorage.getItem('semanario-digital-noticias')||'[]');}
 function mostrar(){let noticias=getNoticias();let f=filtro==="INICIO"?noticias:noticias.filter(n=>n.categoria===filtro);let div=document.getElementById('lista');if(f.length===0){div.innerHTML="<p style='text-align:center'>Todavía no hay noticias en "+filtro+". Publique arriba.</p>";return;}div.innerHTML=f.map(n=>`<div class="card"><span class="etiqueta">${n.categoria}</span> <small>${n.fecha||''}</small><h2>${n.titulo}</h2><p class="bajada">${n.bajada||''}</p>${n.foto?`<img src="${n.foto}">`:''}<p><b>Introducción:</b> ${n.introduccion||''}</p><p><b>Desarrollo:</b> ${n.desarrollo||''}</p><p><b>Conclusión:</b> ${n.conclusion||''}</p></div>`).join('');}
 function publicar(){let n={id:Date.now(),titulo:document.getElementById('titulo').value,bajada:document.getElementById('bajada').value,categoria:document.getElementById('categoria').value,foto:fotoBase64,introduccion:document.getElementById('intro').value,desarrollo:document.getElementById('desarrollo').value,conclusion:document.getElementById('conclusion').value,fecha:new Date().toLocaleDateString('es-AR')};if(!n.titulo){alert('Ponga el título primero');return;}let prev=getNoticias();prev.unshift(n);localStorage.setItem('semanario-digital-noticias',JSON.stringify(prev));alert('¡Publicado en '+n.categoria+'!');mostrar();}
-mostrar();
+function mostrarExtras(){let a=JSON.parse(localStorage.getItem('avisos')||'[]');document.getElementById('avisos').innerHTML=a.map(x=>'<div class="card"><b>'+x.titulo+'</b><p>'+x.texto+'</p><p>'+x.contacto+'</p></div>').join('')||'<p style="text-align:center">Sin avisos todavía</p>';let p=JSON.parse(localStorage.getItem('publicidad')||'[]');document.getElementById('publi').innerHTML=p.map(x=>'<div class="card"><b>'+x.negocio+'</b><p>'+x.texto+'</p><p>'+x.contacto+'</p></div>').join('')||'<p style="text-align:center">Sin publicidad todavía</p>';}
+mostrarExtras();mostrar();
 </script>
 </body>
 </html>
