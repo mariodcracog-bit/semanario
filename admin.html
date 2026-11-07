@@ -5,30 +5,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin - Semanario</title>
 <style>
-body{font-family:Arial;padding:15px;background:#f5f5f5}
-input,textarea,select{width:100%;padding:10px;margin:6px 0;box-sizing:border-box}
-button{padding:10px 20px;background:#a00;color:white;border:none;border-radius:6px;font-weight:bold}
-.card{background:white;padding:10px;margin:8px 0;border-radius:8px}
+body{font-family:Arial;padding:15px;background:#f2f2f2}
+input,textarea,select{width:100%;padding:10px;margin:8px 0;font-size:16px}
+button{padding:12px;width:100%;background:#c00;color:#fff;border:0;font-size:17px;margin-top:5px}
+.card{background:#fff;padding:15px;margin-bottom:20px;border-radius:8px}
+img{max-width:100%}
 </style>
 </head>
 <body>
-  <div id="candado" style="position:fixed;inset:0;background:white;z-index:9999;padding:20px;text-align:center"><h2>Oficina de Mario</h2><input type="password" id="clave" placeholder="Escriba su clave"><br><br><button onclick="if(document.getElementById('clave').value==='Mario1960'){document.getElementById('candado').remove()}else{alert('Clave incorrecta')}">INGRESAR</button></div>
 <h2>ADMIN Semanario Digital</h2>
+<div class="card">
+<h3>1. NOTICIA + FOTO</h3>
 <input id="titulo" placeholder="Titulo de la noticia">
-<select id="categoria"><option>Locales</option><option>Nacionales</option><option>Inter</option><option>Deportes</option><option>Policiales</option></select>
-<textarea id="texto" rows="6" placeholder="Escriba el texto de la noticia aqui..."></textarea>
+<select id="categoria"><option>Locales</option><option>Deportes</option><option>Policiales</option><option>Region</option><option>Nacionales</option><option>Internacionales</option></select>
+<textarea id="texto" rows="5" placeholder="Texto de la noticia..."></textarea>
+<p>Foto:</p>
+<input type="file" id="foto" accept="image/*">
 <button onclick="publicar()">PUBLICAR NOTICIA</button>
-<button onclick="borrarTodo()" style="background:#333;margin-left:10px">Borrar todo y mostrar solo Historia</button>
+</div>
+<div class="card">
+<h3>2. AVISO CLASIFICADO</h3>
+<input id="avisoTitulo" placeholder="Ej: Vendo moto 110">
+<textarea id="avisoTexto" rows="3" placeholder="Descripcion..."></textarea>
+<input id="avisoTel" placeholder="Telefono">
+<button onclick="publicarAviso()">PUBLICAR AVISO</button>
+<div id="listaAvisos"></div>
+</div>
+<div class="card">
+<h3>3. PUBLICIDAD LOCAL</h3>
+<input id="pubNegocio" placeholder="Ej: Panaderia San Martin">
+<textarea id="pubTexto" rows="2" placeholder="Ej: Pan caliente..."></textarea>
+<button onclick="publicarPub()">PUBLICAR PUBLICIDAD</button>
+<button onclick="borrarTodo()" style="background:#333">BORRAR TODO</button>
+</div>
 <div id="lista"></div>
 <script>
 const KEY='noticias_semanario';
-function cargar(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
-function guardar(a){localStorage.setItem(KEY,JSON.stringify(a));localStorage.setItem('noticias',JSON.stringify(a))}
-function publicar(){let t=document.getElementById('titulo').value;let tx=document.getElementById('texto').value;let c=document.getElementById('categoria').value;if(!t||!tx){alert('Falta titulo o texto');return}let a=cargar();a.unshift({titulo:t,texto:tx,categoria:c,fecha:new Date().toLocaleDateString()});guardar(a);document.getElementById('titulo').value='';document.getElementById('texto').value='';mostrar();alert('Noticia publicada! Ahora vaya a la pagina principal')}
-function borrar(id){let a=cargar();a.splice(id,1);guardar(a);mostrar()}
-function borrarTodo(){if(confirm('Borra todo y deja solo la Historia?')){localStorage.removeItem(KEY);localStorage.removeItem('noticias');mostrar();alert('Ahora solo se vera la Historia fija')}}
-function mostrar(){let a=cargar();let d=document.getElementById('lista');if(a.length==0){d.innerHTML='<p>No hay noticias guardadas. Se vera la Historia fija en la pagina principal.</p>';return}d.innerHTML=a.map((n,i)=>`<div class="card"><b>${n.titulo}</b> - ${n.categoria}<br><small>${n.fecha}</small><p>${n.texto.substring(0,120)}...</p><button onclick="borrar(${i})">Borrar esta</button></div>`).join('')}
-window.onload=mostrar;
+let fotoBase="";
+document.getElementById('foto').addEventListener('change',e=>{
+let r=new FileReader(); r.onload=()=>fotoBase=r.result; r.readAsDataURL(e.target.files[0]);
+});
+function get(k){try{return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return []}}
+function set(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function publicar(){
+let t=document.getElementById('titulo').value;
+let c=document.getElementById('categoria').value;
+let x=document.getElementById('texto').value;
+if(!t) return alert('Ponga un titulo');
+let a=get(KEY); a.unshift({id:Date.now(),titulo:t,categoria:c,texto:x,foto:fotoBase,fecha:new Date().toLocaleDateString()});
+set(KEY,a); alert('Noticia publicada!'); mostrar();
+document.getElementById('titulo').value=''; document.getElementById('texto').value=''; fotoBase='';
+}
+function publicarAviso(){
+let a=get('avisos_semanario'); a.unshift({titulo:avisoTitulo.value,texto:avisoTexto.value,tel:avisoTel.value});
+set('avisos_semanario',a); alert('Aviso publicado!'); mostrarAvisos();
+avisoTitulo.value=''; avisoTexto.value=''; avisoTel.value='';
+}
+function publicarPub(){
+let p=get('publicidad_semanario'); p.unshift({negocio:pubNegocio.value,texto:pubTexto.value});
+set('publicidad_semanario',p); alert('Publicidad publicada!');
+pubNegocio.value=''; pubTexto.value='';
+}
+function borrar(id){ let a=get(KEY).filter(n=>n.id!==id); set(KEY,a); mostrar(); }
+function borrarTodo(){ if(confirm('Borrar todo?')){localStorage.clear(); mostrar(); mostrarAvisos();} }
+function mostrar(){
+let a=get(KEY); lista.innerHTML=a.map(n=>`<div class="card"><b>${n.titulo}</b><br>${n.categoria} - ${n.fecha}<br>${n.foto?`<img src="${n.foto}">`:''}<p>${n.texto}</p><button onclick="borrar(${n.id})">Borrar</button></div>`).join('');
+}
+function mostrarAvisos(){
+listaAvisos.innerHTML=get('avisos_semanario').map(a=>`<p><b>${a.titulo}</b><br>${a.texto}<br>Tel: ${a.tel}</p><hr>`).join('');
+}
+window.onload=()=>{mostrar(); mostrarAvisos();};
 </script>
 </body>
 </html>
