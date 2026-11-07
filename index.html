@@ -21,9 +21,21 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc
 .btn{width:100%;background:#b91c1c;color:#fff;padding:14px;font-weight:bold;border:none;border-radius:8px;font-size:17px}
 .etiqueta{background:#b91c1c;color:#fff;padding:3px 8px;font-size:12px;border-radius:4px}
 .pub{background:#fef9c3;border:2px dashed #eab308;padding:15px;text-align:center;margin:12px auto;max-width:800px;border-radius:8px}
-</style>
+.barra-top{background:#111;color:white;display:flex;justify-content:space-between;align-items:center;padding:8px 12px;font-size:14px;flex-wrap:wrap;gap:8px}
+.barra-top a{color:#FFFC00;text-decoration:none;font-weight:bold;background:white;padding:4px 10px;border-radius:20px}
+.barra-top b{font-size:16px}</style>
 </head>
 <body>
+  <div class="barra-top">
+<div>🕒 <b id="hora">--:--</b> | Reconquista, Santa Fe</div>
+<div>🌤️ <span id="clima">Cargando clima...</span></div>
+<div><a href="https://www.snapchat.com/add/mariodante2026" target="_blank">👻 Snapchat: mariodante2026</a></div>
+</div>
+<script>
+function actualizarHora(){let d=new Date();let h=d.toLocaleTimeString('es-AR',{timeZone:'America/Argentina/Buenos_Aires',hour:'2-digit',minute:'2-digit',second:'2-digit'});document.getElementById('hora').textContent=h;}
+actualizarHora();setInterval(actualizarHora,1000);
+fetch('https://api.open-meteo.com/v1/forecast?latitude=-29.14&longitude=-59.64&current=temperature_2m,weather_code&timezone=America%2FArgentina%2FBuenos_Aires').then(r=>r.json()).then(d=>{let t=Math.round(d.current.temperature_2m);let c=d.current.weather_code;let txt='Despejado';if(c==1||c==2)txt='Parcialmente nublado';if(c==3)txt='Nublado';if(c>=45&&c<=48)txt='Niebla';if(c>=51&&c<=67)txt='Lluvia';if(c>=71&&c<=77)txt='Nieve';if(c>=80&&c<=82)txt='Lluvia fuerte';if(c>=95)txt='Tormenta';document.getElementById('clima').textContent=t+'°C - '+txt;}).catch(e=>{document.getElementById('clima').textContent='Ver clima en Google';});
+</script>
 <header><h1><span>SD</span> SEMANARIO DIGITAL</h1><p>Noticias de Reconquista, la región y el mundo</p></header>
 <div class="pub">PUBLICIDAD SUPERIOR 728x90 - Tu publicidad aquí</div>
 <nav id="menu"></nav>
