@@ -58,6 +58,11 @@ fetch('https://api.open-meteo.com/v1/forecast?latitude=-29.14&longitude=-59.64&c
 </div>
 <div id="lista"></div>
   <h2 style="text-align:center">📰 AVISOS CLASIFICADOS</h2>
+  <div style="text-align:center;margin-bottom:10px">
+<button id="btnTodos" onclick="filtrarLocalidad('Todos')" style="background:#16a34a;color:white;padding:8px 14px;border:1px solid #ccc;border-radius:20px;margin:3px">Todos</button>
+<button id="btnReconquista" onclick="filtrarLocalidad('Reconquista')" style="background:white;padding:8px 14px;border:1px solid #ccc;border-radius:20px;margin:3px">Reconquista</button>
+<button id="btnAvellaneda" onclick="filtrarLocalidad('Avellaneda')" style="background:white;padding:8px 14px;border:1px solid #ccc;border-radius:20px;margin:3px">Avellaneda</button>
+</div>
 <div id="avisos"></div>
 <h2 style="text-align:center">📢 PUBLICIDAD LOCAL</h2>
 <div id="publi"></div>
