@@ -80,7 +80,7 @@ function mostrarExtras(){let a=JSON.parse(localStorage.getItem('avisos')||'[]');
 
   mostrarExtras();mostrar();
   
-function filtrarAvisos(ciudad){let t=document.getElementById('btnTodos');let r=document.getElementById('btnReconquista');let a=document.getElementById('btnAvellaneda');t.style.background=ciudad=='Todos'?'#16a34a':'white';t.style.color=ciudad=='Todos'?'white':'black';r.style.background=ciudad=='Reconquista'?'#16a34a':'white';r.style.color=ciudad=='Reconquista'?'white':'black';a.style.background=ciudad=='Avellaneda'?'#16a34a':'white';a.style.color=ciudad=='Avellaneda'?'white':'black';let lista=document.getElementById('avisos').children;for(let i=0;i<lista.length;i++){let texto=lista[i].innerText||'';if(ciudad=='Todos'||texto.includes(ciudad)){lista[i].style.display='';}else{lista[i].style.display='none';}}}
+function filtrarLocalidad(ciudad){let t=document.getElementById('btnTodos');let r=document.getElementById('btnReconquista');let a=document.getElementById('btnAvellaneda');t.style.background=ciudad=='Todos'?'#16a34a':'white';t.style.color=ciudad=='Todos'?'white':'black';r.style.background=ciudad=='Reconquista'?'#16a34a':'white';r.style.color=ciudad=='Reconquista'?'white':'black';a.style.background=ciudad=='Avellaneda'?'#16a34a':'white';a.style.color=ciudad=='Avellaneda'?'white':'black';let lista=document.getElementById('avisos').children;for(let i=0;i<lista.length;i++){let texto=lista[i].innerText||'';if(ciudad=='Todos'||texto.includes(ciudad)){lista[i].style.display='';}else{lista[i].style.display='none';}}}
 </script>
 </body>
 </html>
