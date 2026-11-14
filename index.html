@@ -29,6 +29,20 @@ footer{text-align:center;padding:20px;color:#666}
 <h1>SEMANARIO</h1>
 <p>Reconquista - Santa Fe - Noticias de la región</p>
 </header>
+  <!-- CLIMA RECONQUISTA -->
+<div id="clima" style="background:#00A8E8;color:white;text-align:center;padding:12px;border-radius:12px;margin:10px;font-family:sans-serif">
+  <b>Reconquista, Santa Fe - Cargando clima...</b>
+</div>
+<script>
+fetch('https://api.open-meteo.com/v1/forecast?latitude=-29.14&longitude=-59.64&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=America/Argentina/Buenos_Aires')
+.then(r=>r.json()).then(d=>{
+  let t = d.current.temperature_2m;
+  let h = d.current.relative_humidity_2m;
+  let v = d.current.wind_speed_10m;
+  document.getElementById('clima').innerHTML = '<b>Reconquista, Santa Fe - ' + t + '° - Humedad ' + h + '% - Viento ' + v + ' km/h</b><br><small>Tocá para ver pronóstico completo</small>';
+});
+</script>
+<!-- FIN CLIMA -->
 <div class="filtros" id="filtros"></div>
 <div class="cont" id="contenido"></div>
 <footer>Semanario Reconquista - Actualizado al día</footer>
