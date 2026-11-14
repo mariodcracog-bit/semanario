@@ -9,7 +9,7 @@ body{font-family:Arial,sans-serif;background:#f2f2f2;margin:0;padding:15px}
 .caja{max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:12px}
 h1{color:#1a3a6b;text-align:center}
 label{font-weight:bold;display:block;margin-top:15px}
-input,textarea{width:100%;padding:12px;margin-top:5px;border:1px solid #ccc;border-radius:8px;font-size:16px;box-sizing:border-box}
+input,textarea,select{width:100%;padding:12px;margin-top:5px;border:1px solid #ccc;border-radius:8px;font-size:16px;box-sizing:border-box}
 textarea{min-height:150px}
 button{width:100%;padding:14px;margin-top:15px;background:#1a3a6b;color:#fff;border:0;border-radius:8px;font-size:18px;font-weight:bold}
 .borrar{background:#c00}
@@ -22,6 +22,17 @@ button{width:100%;padding:14px;margin-top:15px;background:#1a3a6b;color:#fff;bor
 <div class="caja">
 <h1>PANEL SEMANARIO</h1>
 <p style="text-align:center">Publicar noticia en la vidriera</p>
+
+<label>Sección</label>
+<select id="seccion">
+<option value="Local">Local</option>
+<option value="Nacionales">Nacionales</option>
+<option value="Internacionales">Internacionales</option>
+<option value="Policiales">Policiales</option>
+<option value="Deportes">Deportes</option>
+<option value="Publicidad Local">Publicidad Local</option>
+<option value="Avisos Clasificados">Avisos Clasificados</option>
+</select>
 
 <label>Título</label>
 <input id="titulo" placeholder="Escriba el título">
@@ -51,21 +62,22 @@ function cargar(){
 let n=JSON.parse(localStorage.getItem('semanario_noticias')||'[]');
 let h='';
 n.forEach((x,i)=>{
-h+='<div class="noticia"><b>'+x.titulo+'</b><p>'+x.texto+'</p>'+(x.foto?'<img src="'+x.foto+'">':'')+'<button onclick="borrarUna('+i+')">Borrar esta</button></div>';
+h+='<div class="noticia"><b>['+(x.seccion||'Local')+'] '+x.titulo+'</b><p>'+x.texto+'</p>'+(x.foto?'<img src="'+x.foto+'">':'')+'<button onclick="borrarUna('+i+')">Borrar esta</button></div>';
 });
 document.getElementById('lista').innerHTML=h||'Todavía no hay noticias';
 }
 function publicar(){
+let s=document.getElementById('seccion').value;
 let t=document.getElementById('titulo').value;
 let x=document.getElementById('texto').value;
 if(!t||!x){alert('Falta título o texto');return;}
 let n=JSON.parse(localStorage.getItem('semanario_noticias')||'[]');
-n.unshift({titulo:t,texto:x,foto:fotoBase,fecha:new Date().toLocaleDateString()});
+n.unshift({seccion:s,titulo:t,texto:x,foto:fotoBase,fecha:new Date().toLocaleDateString()});
 localStorage.setItem('semanario_noticias',JSON.stringify(n));
 document.getElementById('titulo').value='';
 document.getElementById('texto').value='';
 fotoBase='';
-alert('¡Publicado!');
+alert('¡Publicado en '+s+'!');
 cargar();
 }
 function borrarUna(i){
