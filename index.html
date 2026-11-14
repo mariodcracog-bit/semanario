@@ -1,90 +1,79 @@
-6<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SD SEMANARIO DIGITAL - Reconquista y el Mundo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Semanario - Reconquista</title>
 <style>
-body{font-family:Arial,sans-serif;margin:0;background:#fff}
-header{background:#fff;border-bottom:4px solid #b91c1c;padding:15px;text-align:center}
-header h1{margin:0;font-size:30px} header h1 span{background:#b91c1c;color:#fff;padding:2px 8px}
-nav{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;background:#fff;padding:10px}
-nav button{padding:8px 12px;font-weight:bold;border:none;cursor:pointer;background:#e5e7eb}
-nav button.activo{background:#b91c1c;color:#fff}
-.grandes{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:10px}
-.grandes button{padding:12px 16px;font-weight:bold;border:none;border-radius:8px;font-size:15px}
-.card{max-width:800px;margin:12px auto;padding:15px;border:1px solid #eee;border-radius:8px}
-.card img{width:100%;border-radius:8px}
-.bajada{font-style:italic;border-left:4px solid #b91c1c;padding-left:10px;color:#444}
-.form{max-width:800px;margin:15px auto;background:#f9fafb;padding:15px;border-radius:8px}
-input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:6px;box-sizing:border-box}
-.btn{width:100%;background:#b91c1c;color:#fff;padding:14px;font-weight:bold;border:none;border-radius:8px;font-size:17px}
-.etiqueta{background:#b91c1c;color:#fff;padding:3px 8px;font-size:12px;border-radius:4px}
-.pub{background:#fef9c3;border:2px dashed #eab308;padding:15px;text-align:center;margin:12px auto;max-width:800px;border-radius:8px}
-.barra-top{background:#111;color:white;display:flex;justify-content:space-between;align-items:center;padding:8px 12px;font-size:14px;flex-wrap:wrap;gap:8px}
-.barra-top a{color:#FFFC00;text-decoration:none;font-weight:bold;background:white;padding:4px 10px;border-radius:20px}
-.barra-top b{font-size:16px}</style>
+body{font-family:Arial,sans-serif;margin:0;background:#f2f2f2}
+header{background:#1a3a6b;color:#fff;padding:20px;text-align:center}
+header h1{margin:0;font-size:30px}
+header p{margin:5px 0 0}
+.filtros{display:flex;gap:8px;overflow-x:auto;padding:12px;background:#fff;position:sticky;top:0}
+.filtros button{white-space:nowrap;padding:10px 14px;border:1px solid #1a3a6b;background:#fff;color:#1a3a6b;border-radius:20px;font-weight:bold}
+.filtros button.activo{background:#1a3a6b;color:#fff}
+.cont{max-width:800px;margin:auto;padding:12px}
+.seccion-titulo{background:#1a3a6b;color:#fff;padding:10px 14px;border-radius:8px;margin:20px 0 10px}
+.tarjeta{background:#fff;border-radius:12px;overflow:hidden;margin-bottom:15px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.tarjeta img{width:100%;display:block}
+.tarjeta .cuerpo{padding:14px}
+.tarjeta h2{margin:0 0 8px;color:#1a3a6b}
+.tarjeta p{white-space:pre-line;line-height:1.5}
+.etiqueta{display:inline-block;background:#ffcc00;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:bold;margin-bottom:8px}
+.vacio{text-align:center;padding:30px;background:#fff;border-radius:12px}
+footer{text-align:center;padding:20px;color:#666}
+</style>
 </head>
 <body>
-  <!-- BANNER SITIOS UTILES -->
-<div style="text-align:center; background:white; padding:10px;">
-  <img src="IMG-20261111-WA4103.jpg" style="width:100%; max-width:900px; border:2px solid #003399;">
-</div>
-  <div class="barra-top">
-<div>🕒 <b id="hora">--:--</b> | Reconquista, Santa Fe</div>
-<div>🌤️ <span id="clima">Cargando clima...</span></div>
-<div><a href="https://www.snapchat.com/add/mariodante2026" target="_blank">👻 Snapchat: mariodante2026</a></div>
-</div>
+<header>
+<h1>SEMANARIO</h1>
+<p>Reconquista - Santa Fe - Noticias de la región</p>
+</header>
+<div class="filtros" id="filtros"></div>
+<div class="cont" id="contenido"></div>
+<footer>Semanario Reconquista - Actualizado al día</footer>
 <script>
-function actualizarHora(){let d=new Date();let h=d.toLocaleTimeString('es-AR',{timeZone:'America/Argentina/Buenos_Aires',hour:'2-digit',minute:'2-digit',second:'2-digit'});document.getElementById('hora').textContent=h;}
-actualizarHora();setInterval(actualizarHora,1000);
-fetch('https://api.open-meteo.com/v1/forecast?latitude=-29.14&longitude=-59.64&current=temperature_2m,weather_code&timezone=America%2FArgentina%2FBuenos_Aires').then(r=>r.json()).then(d=>{let t=Math.round(d.current.temperature_2m);let c=d.current.weather_code;let txt='Despejado';if(c==1||c==2)txt='Parcialmente nublado';if(c==3)txt='Nublado';if(c>=45&&c<=48)txt='Niebla';if(c>=51&&c<=67)txt='Lluvia';if(c>=71&&c<=77)txt='Nieve';if(c>=80&&c<=82)txt='Lluvia fuerte';if(c>=95)txt='Tormenta';document.getElementById('clima').textContent=t+'°C - '+txt;}).catch(e=>{document.getElementById('clima').textContent='Ver clima en Google';});
-</script>
-<header><h1><span>SD</span> SEMANARIO DIGITAL</h1><p>Noticias de Reconquista, la región y el mundo</p></header>
-<div class="pub">PUBLICIDAD SUPERIOR 728x90 - Tu publicidad aquí</div>
-<nav id="menu"></nav>
-<div class="grandes">
-
-
-<button onclick="filtrar('Avisos Clasificados')" style="background:#16a34a;color:white">📋 AVISOS CLASIFICADOS</button>
-</div>
-<div class="form" id="panel" style="display:none">
-<h2>Publicar nueva noticia</h2>
-<input id="titulo" placeholder="Título de la nota">
-<textarea id="bajada" placeholder="Bajada / Resumen en 1 o 2 líneas"></textarea>
-<select id="categoria"><option>Locales</option><option>Regionales</option><option>Deportes</option><option>Fotografías</option><option>Internacionales</option><option>Publicidad Local</option><option>Avisos Clasificados</option></select>
-<input type="file" id="fotoInput" accept="image/*"><p id="vistaFoto" style="font-size:13px;color:green"></p>
-<textarea id="intro" placeholder="Introducción"></textarea>
-<textarea id="desarrollo" placeholder="Desarrollo"></textarea>
-<textarea id="conclusion" placeholder="Conclusión"></textarea>
-<button class="btn" onclick="publicar()">PUBLICAR AHORA</button>
-<p style="text-align:center;font-size:13px">Esto NO borra lo anterior. Se suma a lo que ya está publicado.</p>
-</div>
-<div id="lista"></div>
-  <h2 style="text-align:center">📰 AVISOS CLASIFICADOS</h2>
-  <div style="text-align:center;margin-bottom:10px">
-<button id="btnTodos" onclick="filtrarLocalidad('Todos')" style="background:#16a34a;color:white;padding:8px 14px;border:1px solid #ccc;border-radius:20px;margin:3px">Todos</button>
-<button id="btnReconquista" onclick="filtrarLocalidad('Reconquista')" style="background:white;padding:8px 14px;border:1px solid #ccc;border-radius:20px;margin:3px">Reconquista</button>
-<button id="btnAvellaneda" onclick="filtrarLocalidad('Avellaneda')" style="background:white;padding:8px 14px;border:1px solid #ccc;border-radius:20px;margin:3px">Avellaneda</button>
-</div>
-<div id="avisos"></div>
-<h2 style="text-align:center">📢 PUBLICIDAD LOCAL</h2>
-<div id="publi"></div>
-<script>
-const CATS=["INICIO","Locales","Regionales","Deportes","Internacionales","Avisos Clasificados"];
-let filtro="INICIO"; let fotoBase64="";
-const menu=document.getElementById('menu');
-CATS.forEach(c=>{let b=document.createElement('button');b.innerText=c;b.onclick=()=>filtrar(c);if(c===filtro)b.classList.add('activo');menu.appendChild(b);});
-function filtrar(c){filtro=c;[...menu.children].forEach(b=>b.classList.toggle('activo',b.innerText===c));mostrar();}
-document.getElementById('fotoInput').addEventListener('change',function(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{fotoBase64=r.result;document.getElementById('vistaFoto').innerText="✅ Foto lista";};r.readAsDataURL(f);});
-function getNoticias(){return JSON.parse(localStorage.getItem('semanario-digital-noticias')||'[]');}
-function mostrar(){let noticias=getNoticias();let f=filtro==="INICIO"?noticias:noticias.filter(n=>n.categoria===filtro);let div=document.getElementById('lista');if(f.length===0){div.innerHTML="<p style='text-align:center'>Todavía no hay noticias en "+filtro+". Publique arriba.</p>";return;}div.innerHTML=f.map(n=>`<div class="card"><span class="etiqueta">${n.categoria}</span> <small>${n.fecha||''}</small><h2>${n.titulo}</h2><p class="bajada">${n.bajada||''}</p>${n.foto?`<img src="${n.foto}">`:''}<p><b>Introducción:</b> ${n.introduccion||''}</p><p><b>Desarrollo:</b> ${n.desarrollo||''}</p><p><b>Conclusión:</b> ${n.conclusion||''}</p></div>`).join('');}
-function publicar(){let n={id:Date.now(),titulo:document.getElementById('titulo').value,bajada:document.getElementById('bajada').value,categoria:document.getElementById('categoria').value,foto:fotoBase64,introduccion:document.getElementById('intro').value,desarrollo:document.getElementById('desarrollo').value,conclusion:document.getElementById('conclusion').value,fecha:new Date().toLocaleDateString('es-AR')};if(!n.titulo){alert('Ponga el título primero');return;}let prev=getNoticias();prev.unshift(n);localStorage.setItem('semanario-digital-noticias',JSON.stringify(prev));alert('¡Publicado en '+n.categoria+'!');mostrar();}
-function mostrarExtras(){let a=JSON.parse(localStorage.getItem('avisos')||'[]');document.getElementById('avisos').innerHTML=a.map(x=>'<div class="card"><b>'+x.titulo+'</b><p>'+x.texto+'</p><p>'+x.contacto+'</p></div>').join('')||'<p style="text-align:center">Sin avisos todavía</p>';let p=JSON.parse(localStorage.getItem('publicidad')||'[]');document.getElementById('publi').innerHTML=p.map(x=>'<div class="card"><b>'+x.negocio+'</b><p>'+x.texto+'</p><p>'+x.contacto+'</p></div>').join('')||'<p style="text-align:center">Sin publicidad todavía</p>';}
-
-  mostrarExtras();mostrar();
-  
-function filtrarLocalidad(ciudad){let t=document.getElementById('btnTodos');let r=document.getElementById('btnReconquista');let a=document.getElementById('btnAvellaneda');t.style.background=ciudad=='Todos'?'#16a34a':'white';t.style.color=ciudad=='Todos'?'white':'black';r.style.background=ciudad=='Reconquista'?'#16a34a':'white';r.style.color=ciudad=='Reconquista'?'white':'black';a.style.background=ciudad=='Avellaneda'?'#16a34a':'white';a.style.color=ciudad=='Avellaneda'?'white':'black';let lista=document.getElementById('avisos').children;for(let i=0;i<lista.length;i++){let texto=lista[i].innerText||'';if(ciudad=='Todos'||texto.includes(ciudad)){lista[i].style.display='';}else{lista[i].style.display='none';}}}
+let secciones=["Todas","Local","Nacionales","Internacionales","Policiales","Deportes","Publicidad Local","Avisos Clasificados"];
+let actual="Todas";
+function botones(){
+let h="";
+secciones.forEach(s=>{
+h+='<button class="'+(s===actual?'activo':'')+'" onclick="filtrar(\''+s+'\')">'+s+'</button>';
+});
+document.getElementById('filtros').innerHTML=h;
+}
+function filtrar(s){actual=s;botones();mostrar();}
+function mostrar(){
+let n=JSON.parse(localStorage.getItem('semanario_noticias')||'[]');
+let c=document.getElementById('contenido');
+if(n.length===0){
+c.innerHTML='<div class="vacio"><h2>Todavía no hay noticias publicadas</h2><p>En breve vas a ver acá las noticias del Semanario.</p></div>';
+return;
+}
+let filtradas = actual==="Todas" ? n : n.filter(x=>(x.seccion||'Local')===actual);
+if(filtradas.length===0){
+c.innerHTML='<div class="vacio"><h2>No hay noticias en '+actual+'</h2><p>Probá con otra sección.</p></div>';
+return;
+}
+let h="";
+if(actual==="Todas"){
+secciones.slice(1).forEach(sec=>{
+let deEsta=n.filter(x=>(x.seccion||'Local')===sec);
+if(deEsta.length===0) return;
+h+='<div class="seccion-titulo">'+sec+'</div>';
+deEsta.forEach(x=>{
+h+='<div class="tarjeta">'+(x.foto?'<img src="'+x.foto+'">':'')+'<div class="cuerpo"><span class="etiqueta">'+(x.seccion||'Local')+'</span><h2>'+x.titulo+'</h2><p>'+x.texto+'</p><small>'+(x.fecha||'')+'</small></div></div>';
+});
+});
+}else{
+filtradas.forEach(x=>{
+h+='<div class="tarjeta">'+(x.foto?'<img src="'+x.foto+'">':'')+'<div class="cuerpo"><span class="etiqueta">'+(x.seccion||'Local')+'</span><h2>'+x.titulo+'</h2><p>'+x.texto+'</p><small>'+(x.fecha||'')+'</small></div></div>';
+});
+}
+c.innerHTML=h;
+}
+botones();
+mostrar();
 </script>
 </body>
 </html>
