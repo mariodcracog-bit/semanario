@@ -1,23 +1,21 @@
-<!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Semanario - Reconquista</title>
-<style>body{font-family:Arial;margin:0;background:#f4f4f4}header{background:#b71c1c;color:#fff;padding:14px;text-align:center}header h1{margin:0}.top{background:#fff;padding:10px;text-align:center;border-bottom:2px solid #ddd}#hora{font-size:20px;font-weight:bold}#clima{margin-top:6px}.filtros{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;padding:10px}.filtros button{padding:8px 12px;border:1px solid #b71c1c;background:#fff;border-radius:20px}.filtros button.on{background:#b71c1c;color:#fff}main{max-width:800px;margin:auto;padding:10px}.card{background:#fff;padding:14px;margin-bottom:12px;border-radius:10px}.card img{width:100%;border-radius:8px}.card h2{margin:8px 0}.tag{background:#eee;padding:3px 8px;border-radius:10px;font-size:12px}.snap{display:block;text-align:center;background:#FFFC00;padding:12px;font-weight:bold;color:#000;text-decoration:none;margin:10px}footer{text-align:center;padding:20px;color:#666}</style></head>
-<body>
-<header><h1>📰 SEMANARIO</h1><p>Reconquista - Santa Fe</p></header>
-<div class="top"><div id="hora">--:--</div><div id="fecha"></div><div id="clima">Cargando clima de Reconquista...</div></div>
-<div class="filtros" id="filtros"></div>
-<a class="snap" href="https://www.snapchat.com/" target="_blank">👻 Seguinos en Snapchat</a>
-<main><div id="noticias">Cargando noticias...</div><h3>📢 Avisos</h3><div id="avisos"></div><h3>📣 Publicidad</h3><div id="publicidad"></div></main>
-<footer>Semanario - Reconquista</footer>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Semanario - Reconquista</title>
+<style>body{font-family:Arial;margin:0;background:#f5f5f5}header{background:#b71c1c;color:#fff;text-align:center;padding:14px}header h1{margin:0;font-size:30px}.fecha{font-size:15px}.clima{font-size:17px;margin-top:4px}.filtros{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:10px}button.f{border:2px solid #b71c1c;background:#fff;color:#000;padding:8px 18px;border-radius:20px;font-size:16px}button.f.act{background:#b71c1c;color:#fff}.snap{background:#ffeb00;text-align:center;padding:14px;font-weight:bold;font-size:19px;margin:10px}.wrap{max-width:650px;margin:auto;padding:0 10px 20px}.card{background:#fff;padding:14px;margin:10px 0;border-radius:8px}.card img{width:100%;border-radius:8px}.card h2{margin:6px 0}.sec{color:#b71c1c;font-size:13px}footer{text-align:center;color:#777;padding:10px}</style></head><body>
+<header><h1>SEMANARIO</h1><div class="fecha" id="fecha"></div><div class="clima" id="clima">☀️ Reconquista: cargando clima...</div></header>
+<div class="filtros" id="filtros"></div><div class="snap">👻 Seguinos en Snapchat</div>
+<div class="wrap"><div id="noticias"></div><h2>📢 Avisos</h2><div id="avisos">Sin avisos</div><h2>📣 Publicidad</h2><div id="publi">Sin publicidad</div></div><footer>Semanario - Reconquista</footer>
 <script>
 const NPOINT="https://api.npoint.io/ead0ae42a9f85435a3bd";
-const SECCIONES=["Todos","Nacionales","Internacionales","Regionales","Locales","Policiales","Deporte"];
-let TODAS=[],FILTRO="Todos";
-function mostrarHora(){const d=new Date();document.getElementById("hora").textContent=d.toLocaleTimeString("es-AR");document.getElementById("fecha").textContent=d.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});} setInterval(mostrarHora,1000);mostrarHora();
-async function clima(){try{const r=await fetch("https://api.open-meteo.com/v1/forecast?latitude=-29.23&longitude=-59.64&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=America%2FArgentina%2FBuenos_Aires");const j=await r.json();document.getElementById("clima").textContent="🌤️ Reconquista: "+j.current.temperature_2m+"°C - Humedad "+j.current.relative_humidity_2m+"% - Viento "+j.current.wind_speed_10m+" km/h";}catch(e){document.getElementById("clima").textContent="Clima no disponible";}} clima();
-function botones(){document.getElementById("filtros").innerHTML=SECCIONES.map(s=>`<button class="${s===FILTRO?"on":""}" onclick="filtrar('${s}')">${s}</button>`).join("");}
-function filtrar(s){FILTRO=s;botones();pintar();}
-function pintar(){const lista=FILTRO==="Todos"?TODAS:TODAS.filter(n=>(n.seccion||"Locales")===FILTRO);document.getElementById("noticias").innerHTML=lista.length?lista.map(n=>`<div class="card"><span class="tag">${n.seccion||"Locales"}</span><h2>${n.titulo||""}</h2>${n.imagen?`<img src="${n.imagen}">`:""}<p>${n.texto||n.contenido||""}</p><small>${n.fecha||""}</small></div>`).join(""):"<p>No hay noticias en esta sección todavía.</p>";}
-async function cargar(){try{const r=await fetch(NPOINT);const j=await r.json();const datos=Array.isArray(j)?{noticias:j,avisos:[],publicidad:[]}:j;TODAS=datos.noticias||[];document.getElementById("avisos").innerHTML=(datos.avisos||[]).map(a=>`<div class="card">📢 ${a.titulo||a.texto||a}</div>`).join("")||"<p>Sin avisos</p>";document.getElementById("publicidad").innerHTML=(datos.publicidad||[]).map(a=>`<div class="card">📣 ${a.titulo||a.texto||a}</div>`).join("")||"<p>Sin publicidad</p>";botones();pintar();}catch(e){document.getElementById("noticias").innerHTML="<p>No se pudo cargar. Intentá de nuevo.</p>";}}
-cargar();
+const SECS=["Todos","Nacionales","Internacionales","Regionales","Locales","Policiales","Deporte"];
+let DATOS={noticias:[],avisos:[],publicidad:[]}; let ACTUAL="Todos";
+function hora(){const d=new Date();document.getElementById("fecha").textContent=d.toLocaleTimeString("es-AR")+" - "+d.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});}
+setInterval(hora,1000);hora();
+async function clima(){try{const r=await fetch("https://api.open-meteo.com/v1/forecast?latitude=-29.14&longitude=-59.64&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=America%2FArgentina%2FCordoba");const j=await r.json();document.getElementById("clima").textContent=`☀️ Reconquista: ${j.current.temperature_2m}°C - Humedad ${j.current.relative_humidity_2m}% - Viento ${j.current.wind_speed_10m} km/h`;}catch(e){}}
+clima();
+function botones(){document.getElementById("filtros").innerHTML=SECS.map(s=>`<button class="f ${s===ACTUAL?"act":""}" onclick="cambiar('${s}')">${s}</button>`).join("");}
+function cambiar(s){ACTUAL=s;botones();mostrar();}
+function mostrar(){let lista=DATOS.noticias||[];if(ACTUAL!=="Todos") lista=lista.filter(n=>(n.seccion||"")===ACTUAL);document.getElementById("noticias").innerHTML=lista.length?lista.map(n=>`<div class="card"><div class="sec">${n.seccion||""} - ${n.fecha||""}</div><h2>${n.titulo||""}</h2>${n.imagen?`<img src="${n.imagen}">`:""}<p>${n.texto||""}</p></div>`).join(""):"<p>No hay noticias en esta sección todavía.</p>";
+document.getElementById("avisos").innerHTML=(DATOS.avisos||[]).length?(DATOS.avisos||[]).map(a=>`<div class="card">${a.titulo||a}</div>`).join(""):"Sin avisos";
+document.getElementById("publi").innerHTML=(DATOS.publicidad||[]).length?(DATOS.publicidad||[]).map(a=>`<div class="card">${a.titulo||a}</div>`).join(""):"Sin publicidad";}
+async function cargar(){try{const r=await fetch(NPOINT);let j=await r.json();if(Array.isArray(j)) j={noticias:j,avisos:[],publicidad:[]};DATOS=j;botones();mostrar();}catch(e){document.getElementById("noticias").textContent="No se pudo cargar."}}
+botones();cargar();
 </script></body></html>
