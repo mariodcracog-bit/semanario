@@ -1,12 +1,12 @@
 <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Semanario</title>
-<style>body{font-family:Arial;max-width:600px;margin:auto;padding:12px}input,select,textarea{width:100%;padding:10px;margin:6px 0}button{padding:12px;background:#b71c1c;color:#fff;border:0;width:100%;margin-top:6px}.card{background:#f5f5f5;padding:10px;margin:8px 0}</style></head><body>
+<style>body{font-family:Arial;max-width:600px;margin:auto;padding:12px}input,select,textarea{width:100%;padding:10px;margin:6px 0}button{padding:12px;background:#b71c1c;color:#fff;border:0;width:100%;margin-top:6px}.card{background:#f5f5f5;padding:10px;margin:8px 0}.borrar{background:#333!important;width:auto!important;padding:6px 12px!important;margin-top:6px}</style></head><body>
 <h2>Admin Semanario</h2><p id="estado">Conectando...</p>
 <input id="titulo" placeholder="Título de la noticia"><select id="seccion"><option>Nacionales</option><option>Internacionales</option><option>Regionales</option><option>Locales</option><option>Policiales</option><option>Deporte</option></select>
 <input id="imagen" placeholder="Link de la foto (opcional)"><textarea id="texto" rows="4" placeholder="Escribí la noticia acá..."></textarea>
 <button onclick="guardar('noticias')">✅ PUBLICAR NOTICIA</button>
 <hr><h3>Avisos</h3><input id="aviso" placeholder="Escribí el aviso"><button onclick="guardar('avisos')">Publicar Aviso</button>
 <h3>Publicidad</h3><input id="publi" placeholder="Escribí la publicidad"><button onclick="guardar('publicidad')">Publicar Publicidad</button>
-<hr><h3>Lo publicado</h3><div id="lista"></div>
+<hr><h3>Lo publicado</h3><h4>Noticias</h4><div id="lista"></div><h4>Avisos</h4><div id="listaAvisos"></div><h4>Publicidad</h4><div id="listaPubli"></div>
 <script>
 const NPOINT="https://api.npoint.io/ead0ae42a9f85435a3bd";
 let DATOS={noticias:[],avisos:[],publicidad:[]};
@@ -24,7 +24,11 @@ DATOS=j;mostrar();}catch(e){document.getElementById("estado").textContent="⚠�
 async function guardarEnNube(d){await fetch(NPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)});}
 async function guardar(tipo){let item=null;if(tipo==="noticias"){const t=document.getElementById("titulo").value.trim(),tx=document.getElementById("texto").value.trim();if(!t||!tx) return alert("Falta título o texto");item={titulo:t,texto:tx,seccion:document.getElementById("seccion").value,imagen:document.getElementById("imagen").value,fecha:new Date().toLocaleString("es-AR")};}if(tipo==="avisos"){const v=document.getElementById("aviso").value.trim();if(!v) return alert("Escribí el aviso");item={titulo:v};}if(tipo==="publicidad"){const v=document.getElementById("publi").value.trim();if(!v) return alert("Escribí la publicidad");item={titulo:v};}
 DATOS[tipo]=DATOS[tipo]||[];DATOS[tipo].unshift(item);await guardarEnNube(DATOS);alert("¡Publicado en internet!");mostrar();}
-function mostrar(){document.getElementById("lista").innerHTML=(DATOS.noticias||[]).map((n,i)=>`<div class="card"><b>${n.seccion||""} - ${n.titulo}</b><br><button onclick="borrar('noticias',${i})">Borrar</button></div>`).join("")||"Sin noticias";}
+function mostrar(){
+document.getElementById("lista").innerHTML=(DATOS.noticias||[]).map((n,i)=>`<div class="card"><b>${n.seccion||""} - ${n.titulo}</b><br><button class="borrar" onclick="borrar('noticias',${i})">🗑️ Borrar</button></div>`).join("")||"Sin noticias";
+document.getElementById("listaAvisos").innerHTML=(DATOS.avisos||[]).map((n,i)=>`<div class="card"><b>${n.titulo}</b><br><button class="borrar" onclick="borrar('avisos',${i})">🗑️ Borrar</button></div>`).join("")||"Sin avisos";
+document.getElementById("listaPubli").innerHTML=(DATOS.publicidad||[]).map((n,i)=>`<div class="card"><b>${n.titulo}</b><br><button class="borrar" onclick="borrar('publicidad',${i})">🗑️ Borrar</button></div>`).join("")||"Sin publicidad";
+}
 async function borrar(tipo,i){if(!confirm("¿Borrar?"))return;DATOS[tipo].splice(i,1);await guardarEnNube(DATOS);mostrar();}
 cargar();
 </script></body></html>
