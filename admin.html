@@ -1,80 +1,30 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin - Semanario</title>
-<style>
-body{font-family:Arial;padding:15px;background:#f2f2f2}
-input,textarea,select{width:100%;padding:10px;margin:8px 0;font-size:16px}
-button{padding:12px;width:100%;background:#c00;color:#fff;border:0;font-size:17px;margin-top:5px}
-.card{background:#fff;padding:15px;margin-bottom:20px;border-radius:8px}
-img{max-width:100%}
-</style>
-</head>
-<body>
-<h2>ADMIN Semanario Digital</h2>
-<div class="card">
-<h3>1. NOTICIA + FOTO</h3>
-<input id="titulo" placeholder="Titulo de la noticia">
-<select id="categoria"><option>Locales</option><option>Deportes</option><option>Policiales</option><option>Region</option><option>Nacionales</option><option>Internacionales</option></select>
-<textarea id="texto" rows="5" placeholder="Texto de la noticia..."></textarea>
-<p>Foto:</p>
-<input type="file" id="foto" accept="image/*">
-<button onclick="publicar()">PUBLICAR NOTICIA</button>
-</div>
-<div class="card">
-<h3>2. AVISO CLASIFICADO</h3>
-<input id="avisoTitulo" placeholder="Ej: Vendo moto 110">
-<textarea id="avisoTexto" rows="3" placeholder="Descripcion..."></textarea>
-<input id="avisoTel" placeholder="Telefono">
-<button onclick="publicarAviso()">PUBLICAR AVISO</button>
-<div id="listaAvisos"></div>
-</div>
-<div class="card">
-<h3>3. PUBLICIDAD LOCAL</h3>
-<input id="pubNegocio" placeholder="Ej: Panaderia San Martin">
-<textarea id="pubTexto" rows="2" placeholder="Ej: Pan caliente..."></textarea>
-<button onclick="publicarPub()">PUBLICAR PUBLICIDAD</button>
-<button onclick="borrarTodo()" style="background:#333">BORRAR TODO</button>
-</div>
-<div id="lista"></div>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Semanario</title>
+<style>body{font-family:Arial;max-width:600px;margin:auto;padding:12px}input,select,textarea{width:100%;padding:10px;margin:6px 0}button{padding:12px;background:#b71c1c;color:#fff;border:0;width:100%;margin-top:6px}.card{background:#f5f5f5;padding:10px;margin:8px 0}</style></head><body>
+<h2>Admin Semanario</h2><p id="estado">Conectando...</p>
+<input id="titulo" placeholder="Título de la noticia"><select id="seccion"><option>Nacionales</option><option>Internacionales</option><option>Regionales</option><option>Locales</option><option>Policiales</option><option>Deporte</option></select>
+<input id="imagen" placeholder="Link de la foto (opcional)"><textarea id="texto" rows="4" placeholder="Escribí la noticia acá..."></textarea>
+<button onclick="guardar('noticias')">✅ PUBLICAR NOTICIA</button>
+<hr><h3>Avisos</h3><input id="aviso" placeholder="Escribí el aviso"><button onclick="guardar('avisos')">Publicar Aviso</button>
+<h3>Publicidad</h3><input id="publi" placeholder="Escribí la publicidad"><button onclick="guardar('publicidad')">Publicar Publicidad</button>
+<hr><h3>Lo publicado</h3><div id="lista"></div>
 <script>
-const KEY='semanario-digital-noticias';
-let fotoBase="";
-document.getElementById('foto').addEventListener('change',e=>{
-let r=new FileReader(); r.onload=()=>fotoBase=r.result; r.readAsDataURL(e.target.files[0]);
-});
-function get(k){try{return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return []}}
-function set(k,v){localStorage.setItem(k,JSON.stringify(v))}
-function publicar(){
-let t=document.getElementById('titulo').value;
-let c=document.getElementById('categoria').value;
-let x=document.getElementById('texto').value;
-if(!t) return alert('Ponga un titulo');
-let a=get(KEY); a.unshift({id:Date.now(),titulo:t,categoria:c,texto:x,foto:fotoBase,fecha:new Date().toLocaleDateString()});
-set(KEY,a); alert('Noticia publicada!'); mostrar();
-document.getElementById('titulo').value=''; document.getElementById('texto').value=''; fotoBase='';
-}
-function publicarAviso(){
-let a=get('avisos_semanario'); a.unshift({titulo:avisoTitulo.value,texto:avisoTexto.value,tel:avisoTel.value});
-set('avisos_semanario',a); alert('Aviso publicado!'); mostrarAvisos();
-avisoTitulo.value=''; avisoTexto.value=''; avisoTel.value='';
-}
-function publicarPub(){
-let p=get('publicidad_semanario'); p.unshift({negocio:pubNegocio.value,texto:pubTexto.value});
-set('publicidad_semanario',p); alert('Publicidad publicada!');
-pubNegocio.value=''; pubTexto.value='';
-}
-function borrar(id){ let a=get(KEY).filter(n=>n.id!==id); set(KEY,a); mostrar(); }
-function borrarTodo(){ if(confirm('Borrar todo?')){localStorage.clear(); mostrar(); mostrarAvisos();} }
-function mostrar(){
-let a=get(KEY); lista.innerHTML=a.map(n=>`<div class="card"><b>${n.titulo}</b><br>${n.categoria} - ${n.fecha}<br>${n.foto?`<img src="${n.foto}">`:''}<p>${n.texto}</p><button onclick="borrar(${n.id})">Borrar</button></div>`).join('');
-}
-function mostrarAvisos(){
-listaAvisos.innerHTML=get('avisos_semanario').map(a=>`<p><b>${a.titulo}</b><br>${a.texto}<br>Tel: ${a.tel}</p><hr>`).join('');
-}
-window.onload=()=>{mostrar(); mostrarAvisos();};
-</script>
-</body>
-</html>
+const NPOINT="https://api.npoint.io/ead0ae42a9f85435a3bd";
+let DATOS={noticias:[],avisos:[],publicidad:[]};
+function leerViejo(clave){try{return JSON.parse(localStorage.getItem(clave)||"[]")}catch(e){return[]}}
+async function cargar(){try{const r=await fetch(NPOINT);let j=await r.json();if(Array.isArray(j)) j={noticias:j,avisos:[],publicidad:[]};
+if((!j.noticias||!j.noticias.length)){
+  const viejo=[...leerViejo("semanario-digital-noticias"),...leerViejo("noticias"),...leerViejo("semanario_noticias")];
+  const avisosViejos=[...leerViejo("avisos_semanario"),...leerViejo("avisos")];
+  const publiVieja=[...leerViejo("publicidad_semanario"),...leerViejo("publicidad")];
+  if(viejo.length||avisosViejos.length||publiVieja.length){j={noticias:viejo,avisos:avisosViejos.map(t=>typeof t==="string"?{titulo:t}:t),publicidad:publiVieja.map(t=>typeof t==="string"?{titulo:t}:t)};await guardarEnNube(j);document.getElementById("estado").textContent="✅ Se recuperaron "+viejo.length+" noticias viejas del celular y ya están en internet.";}
+  else if(j.what){j={noticias:[],avisos:[],publicidad:[]};await guardarEnNube(j);document.getElementById("estado").textContent="✅ Cajita limpiada y lista. No había noticias viejas.";}
+  else document.getElementById("estado").textContent="✅ Conectado a internet";
+} else document.getElementById("estado").textContent="✅ Conectado a internet";
+DATOS=j;mostrar();}catch(e){document.getElementById("estado").textContent="⚠️ No se pudo conectar. Revisá internet."}}
+async function guardarEnNube(d){await fetch(NPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)});}
+async function guardar(tipo){let item=null;if(tipo==="noticias"){const t=document.getElementById("titulo").value.trim(),tx=document.getElementById("texto").value.trim();if(!t||!tx) return alert("Falta título o texto");item={titulo:t,texto:tx,seccion:document.getElementById("seccion").value,imagen:document.getElementById("imagen").value,fecha:new Date().toLocaleString("es-AR")};}if(tipo==="avisos"){const v=document.getElementById("aviso").value.trim();if(!v) return alert("Escribí el aviso");item={titulo:v};}if(tipo==="publicidad"){const v=document.getElementById("publi").value.trim();if(!v) return alert("Escribí la publicidad");item={titulo:v};}
+DATOS[tipo]=DATOS[tipo]||[];DATOS[tipo].unshift(item);await guardarEnNube(DATOS);alert("¡Publicado en internet!");mostrar();}
+function mostrar(){document.getElementById("lista").innerHTML=(DATOS.noticias||[]).map((n,i)=>`<div class="card"><b>${n.seccion||""} - ${n.titulo}</b><br><button onclick="borrar('noticias',${i})">Borrar</button></div>`).join("")||"Sin noticias";}
+async function borrar(tipo,i){if(!confirm("¿Borrar?"))return;DATOS[tipo].splice(i,1);await guardarEnNube(DATOS);mostrar();}
+cargar();
+</script></body></html>
