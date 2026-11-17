@@ -1,34 +1,53 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Semanario</title>
-<style>body{font-family:Arial;max-width:600px;margin:auto;padding:12px}input,select,textarea{width:100%;padding:10px;margin:6px 0}button{padding:12px;background:#b71c1c;color:#fff;border:0;width:100%;margin-top:6px}.card{background:#f5f5f5;padding:10px;margin:8px 0}.borrar{background:#333!important;width:auto!important;padding:6px 12px!important;margin-top:6px}</style></head><body>
-<h2>Admin Semanario</h2><p id="estado">Conectando...</p>
-<input id="titulo" placeholder="Título de la noticia"><select id="seccion"><option>Nacionales</option><option>Internacionales</option><option>Regionales</option><option>Locales</option><option>Policiales</option><option>Deporte</option></select>
-<input id="imagen" placeholder="Link de la foto (opcional)"><textarea id="texto" rows="4" placeholder="Escribí la noticia acá..."></textarea>
-<button onclick="guardar('noticias')">✅ PUBLICAR NOTICIA</button>
-<hr><h3>Avisos</h3><input id="aviso" placeholder="Escribí el aviso"><button onclick="guardar('avisos')">Publicar Aviso</button>
-<h3>Publicidad</h3><input id="publi" placeholder="Escribí la publicidad"><button onclick="guardar('publicidad')">Publicar Publicidad</button>
-<hr><h3>Lo publicado</h3><h4>Noticias</h4><div id="lista"></div><h4>Avisos</h4><div id="listaAvisos"></div><h4>Publicidad</h4><div id="listaPubli"></div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Semanario</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;padding:12px;background:#fff}
+h1{text-align:center;font-size:32px}h2{font-size:24px;margin-top:28px}
+label{font-weight:bold;display:block;margin:14px 0 4px}
+input,select,textarea{width:100%;padding:12px;font-size:16px;border:2px solid #111;box-sizing:border-box;border-radius:4px}
+textarea{min-height:80px}
+button{width:100%;padding:14px;font-size:18px;background:#c1272d;color:#fff;border:none;border-radius:4px;margin-top:12px}
+button.green{background:#1a9e4a}.card{border:1px solid #ddd;padding:10px;margin:10px 0;border-radius:8px}.small{font-size:13px;color:#555}.cat{display:inline-block;background:#c1272d;color:#fff;padding:3px 8px;border-radius:20px;font-size:12px}.del{background:#111}
+</style>
+</head>
+<body>
+<h1>SEMANARIO - ADMIN</h1>
+<h2>Noticias</h2>
+<label>Título</label><input id="nTitulo" placeholder="Título de la noticia">
+<label>Categoría</label><select id="nCat"><option>Nacionales</option><option>Internacionales</option><option>Regionales</option><option>Locales</option><option>Policiales</option><option>Deporte</option></select>
+<label>Texto</label><textarea id="nTexto" placeholder="Escribí la noticia"></textarea>
+<button onclick="publicarNoticia()">✅ PUBLICAR NOTICIA</button>
+<hr>
+<h2>Avisos - Clasificados</h2>
+<label>Título</label><input id="aTitulo" placeholder="Ej: VENDO BICI">
+<label>Categoría</label><select id="aCat"><option>Propiedades</option><option>Alquileres</option><option>Autos</option><option>Motos</option><option>Camiones y Maquinas</option><option>Empleos</option><option>Servicios</option><option>Mascotas</option><option>Varios</option><option>Agro</option></select>
+<label>Descripción</label><textarea id="aTexto" placeholder="Escribí el aviso"></textarea>
+<label>Teléfono / WhatsApp</label><input id="aTel" placeholder="Ej: 3482 123456">
+<label>Precio</label><input id="aPrecio" placeholder="Ej: $500.000 o Consultar">
+<button onclick="publicarAviso()">PUBLICAR AVISO</button>
+<hr>
+<h2>Publicidad</h2>
+<label>Título</label><input id="pTitulo" placeholder="Nombre del negocio">
+<label>Texto</label><textarea id="pTexto" placeholder="Escribí la publicidad"></textarea>
+<button class="green" onclick="publicarPubli()">PUBLICAR PUBLICIDAD</button>
+<hr>
+<h2>Lo publicado</h2>
+<h3>Noticias</h3><div id="listN"></div>
+<h3>Avisos</h3><div id="listA"></div>
+<h3>Publicidad</h3><div id="listP"></div>
 <script>
-const NPOINT="https://api.npoint.io/ead0ae42a9f85435a3bd";
-let DATOS={noticias:[],avisos:[],publicidad:[]};
-function leerViejo(clave){try{return JSON.parse(localStorage.getItem(clave)||"[]")}catch(e){return[]}}
-async function cargar(){try{const r=await fetch(NPOINT);let j=await r.json();if(Array.isArray(j)) j={noticias:j,avisos:[],publicidad:[]};
-if((!j.noticias||!j.noticias.length)){
-  const viejo=[...leerViejo("semanario-digital-noticias"),...leerViejo("noticias"),...leerViejo("semanario_noticias")];
-  const avisosViejos=[...leerViejo("avisos_semanario"),...leerViejo("avisos")];
-  const publiVieja=[...leerViejo("publicidad_semanario"),...leerViejo("publicidad")];
-  if(viejo.length||avisosViejos.length||publiVieja.length){j={noticias:viejo,avisos:avisosViejos.map(t=>typeof t==="string"?{titulo:t}:t),publicidad:publiVieja.map(t=>typeof t==="string"?{titulo:t}:t)};await guardarEnNube(j);document.getElementById("estado").textContent="✅ Se recuperaron "+viejo.length+" noticias viejas del celular y ya están en internet.";}
-  else if(j.what){j={noticias:[],avisos:[],publicidad:[]};await guardarEnNube(j);document.getElementById("estado").textContent="✅ Cajita limpiada y lista. No había noticias viejas.";}
-  else document.getElementById("estado").textContent="✅ Conectado a internet";
-} else document.getElementById("estado").textContent="✅ Conectado a internet";
-DATOS=j;mostrar();}catch(e){document.getElementById("estado").textContent="⚠️ No se pudo conectar. Revisá internet."}}
-async function guardarEnNube(d){await fetch(NPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)});}
-async function guardar(tipo){let item=null;if(tipo==="noticias"){const t=document.getElementById("titulo").value.trim(),tx=document.getElementById("texto").value.trim();if(!t||!tx) return alert("Falta título o texto");item={titulo:t,texto:tx,seccion:document.getElementById("seccion").value,imagen:document.getElementById("imagen").value,fecha:new Date().toLocaleString("es-AR")};}if(tipo==="avisos"){const v=document.getElementById("aviso").value.trim();if(!v) return alert("Escribí el aviso");item={titulo:v};}if(tipo==="publicidad"){const v=document.getElementById("publi").value.trim();if(!v) return alert("Escribí la publicidad");item={titulo:v};}
-DATOS[tipo]=DATOS[tipo]||[];DATOS[tipo].unshift(item);await guardarEnNube(DATOS);alert("¡Publicado en internet!");mostrar();}
-function mostrar(){
-document.getElementById("lista").innerHTML=(DATOS.noticias||[]).map((n,i)=>`<div class="card"><b>${n.seccion||""} - ${n.titulo}</b><br><button class="borrar" onclick="borrar('noticias',${i})">🗑️ Borrar</button></div>`).join("")||"Sin noticias";
-document.getElementById("listaAvisos").innerHTML=(DATOS.avisos||[]).map((n,i)=>`<div class="card"><b>${n.titulo}</b><br><button class="borrar" onclick="borrar('avisos',${i})">🗑️ Borrar</button></div>`).join("")||"Sin avisos";
-document.getElementById("listaPubli").innerHTML=(DATOS.publicidad||[]).map((n,i)=>`<div class="card"><b>${n.titulo}</b><br><button class="borrar" onclick="borrar('publicidad',${i})">🗑️ Borrar</button></div>`).join("")||"Sin publicidad";
-}
-async function borrar(tipo,i){if(!confirm("¿Borrar?"))return;DATOS[tipo].splice(i,1);await guardarEnNube(DATOS);mostrar();}
-cargar();
-</script></body></html>
+function get(k){try{return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return[]}}
+function set(k,v){localStorage.setItem(k,JSON.stringify(v));mostrar()}
+function publicarNoticia(){let t=document.getElementById('nTitulo').value.trim();let c=document.getElementById('nCat').value;let x=document.getElementById('nTexto').value.trim();if(!t||!x){alert('Falta título o texto');return}let a=get('noticias_semanario');a.unshift({t,c,x,fecha:new Date().toLocaleString('es-AR')});set('noticias_semanario',a);document.getElementById('nTitulo').value='';document.getElementById('nTexto').value='';alert('Noticia publicada!')}
+function publicarAviso(){let t=document.getElementById('aTitulo').value.trim();let c=document.getElementById('aCat').value;let x=document.getElementById('aTexto').value.trim();let tel=document.getElementById('aTel').value.trim();let p=document.getElementById('aPrecio').value.trim();if(!t||!x){alert('Falta título o descripción');return}let a=get('avisos_semanario');a.unshift({t,c,x,tel,p,fecha:new Date().toLocaleString('es-AR')});set('avisos_semanario',a);document.getElementById('aTitulo').value='';document.getElementById('aTexto').value='';document.getElementById('aTel').value='';document.getElementById('aPrecio').value='';alert('Aviso publicado en '+c+'!')}
+function publicarPubli(){let t=document.getElementById('pTitulo').value.trim();let x=document.getElementById('pTexto').value.trim();if(!t||!x){alert('Falta título o texto');return}let a=get('publi_semanario');a.unshift({t,x,fecha:new Date().toLocaleString('es-AR')});set('publi_semanario',a);document.getElementById('pTitulo').value='';document.getElementById('pTexto').value='';alert('Publicidad publicada!')}
+function borrar(key,i){let a=get(key);a.splice(i,1);set(key,a)}
+function mostrar(){let n=get('noticias_semanario');document.getElementById('listN').innerHTML=n.length?n.map((o,i)=>`<div class="card"><span class="cat">${o.c}</span><b> ${o.t}</b><br>${o.x}<br><span class="small">${o.fecha}</span><button class="del" onclick="borrar('noticias_semanario',${i})">Borrar</button></div>`).join(''):'Sin noticias';let a=get('avisos_semanario');document.getElementById('listA').innerHTML=a.length?a.map((o,i)=>`<div class="card"><span class="cat">${o.c}</span><b> ${o.t}</b><br>${o.x}<br><b>Precio:</b> ${o.p||'-'} | <b>Tel:</b> ${o.tel||'-'}<br><span class="small">${o.fecha}</span><button class="del" onclick="borrar('avisos_semanario',${i})">Borrar</button></div>`).join(''):'Sin avisos';let p=get('publi_semanario');document.getElementById('listP').innerHTML=p.length?p.map((o,i)=>`<div class="card"><b>${o.t}</b><br>${o.x}<br><span class="small">${o.fecha}</span><button class="del" onclick="borrar('publi_semanario',${i})">Borrar</button></div>`).join(''):'Sin publicidad';}
+mostrar();
+</script>
+</body>
+</html>
