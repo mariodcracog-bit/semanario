@@ -16,6 +16,6 @@ function cambiar(s){ACTUAL=s;botones();mostrar();}
 function mostrar(){let lista=DATOS.noticias||[];if(ACTUAL!=="Todos") lista=lista.filter(n=>(n.seccion||"")===ACTUAL);document.getElementById("noticias").innerHTML=lista.length?lista.map(n=>`<div class="card"><div class="sec">${n.seccion||""} - ${n.fecha||""}</div><h2>${n.titulo||""}</h2>${n.imagen?`<img src="${n.imagen}">`:""}<p>${n.texto||""}</p></div>`).join(""):"<p>No hay noticias en esta sección todavía.</p>";
 document.getElementById("avisos").innerHTML=(DATOS.avisos||[]).length?(DATOS.avisos||[]).map(a=>`<div class="card">${a.titulo||a}</div>`).join(""):"Sin avisos";
 document.getElementById("publi").innerHTML=(DATOS.publicidad||[]).length?(DATOS.publicidad||[]).map(a=>`<div class="card">${a.titulo||a}</div>`).join(""):"Sin publicidad";}
-async function cargar(){try{const r=await fetch(NPOINT);let j=await r.json();if(Array.isArray(j)) j={noticias:j,avisos:[],publicidad:[]};DATOS=j;botones();mostrar();}catch(e){document.getElementById("noticias").textContent="No se pudo cargar."}}
+async function cargar(){try{const r=await fetch(NPOINT);let j=await r.json();if(Array.isArray(j)) j={noticias:j,avisos:[],publicidad:[]};DATOS=j;try{const ra=await fetch("avisos.json");DATOS.avisos=await ra.json();}catch(e){}botones();mostrar();}catch(e){document.getElementById("noticias").textContent="No se pudo cargar."}}
 botones();cargar();
 </script></body></html>
