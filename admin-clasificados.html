@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Clasificados</title>
+<style>body{font-family:system-ui;padding:16px;max-width:600px;margin:auto}input,select,textarea{width:100%;padding:10px;margin:6px 0;box-sizing:border-box}button{background:#0a7a42;color:#fff;border:0;padding:12px;width:100%;font-size:17px;border-radius:8px}img{max-width:100%;border-radius:8px}.card{border:1px solid #ddd;padding:10px;border-radius:8px;margin:10px 0}</style></head>
+<body>
+<h2>📢 Admin Clasificados</h2>
+<input id="titulo" placeholder="Título del aviso">
+<select id="categoria"><option>Varios</option><option>Autos</option><option>Casas</option><option>Trabajo</option><option>Mascotas</option></select>
+<textarea id="descripcion" placeholder="Descripción"></textarea>
+<input id="telefono" placeholder="Teléfono">
+<input id="precio" placeholder="Precio">
+<p><b>Foto:</b></p>
+<input type="file" id="foto" accept="image/*">
+<img id="preview" style="display:none">
+<button onclick="publicar()">PUBLICAR AVISO</button>
+<p id="msg"></p>
+<h3>Avisos publicados</h3>
+<div id="lista"></div>
+<script>
+let fotoBase64="";
+document.getElementById('foto').addEventListener('change',e=>{
+  let f=e.target.files[0]; if(!f) return;
+  let r=new FileReader();
+  r.onload=()=>{ fotoBase64=r.result; let p=document.getElementById('preview'); p.src=fotoBase64; p.style.display='block'; };
+  r.readAsDataURL(f);
+});
+async function cargar(){
+  let res=await fetch('/api/clasificados'); let datos=await res.json();
+  let html=""; datos.forEach(a=>{ html+=`<div class="card"><b>${a.titulo||''}</b> - ${a.categoria||''}<br>${a.descripcion||''}<br>Tel: ${a.telefono||''} - $${a.precio||''}<br>${a.foto?`<img src="${a.foto}">`:''}</div>`; });
+  document.getElementById('lista').innerHTML=html||"Todavía no hay avisos";
+}
+async function publicar(){
+  let aviso={titulo:titulo.value, categoria:categoria.value, descripcion:descripcion.value, telefono:telefono.value, precio:precio.value, foto:fotoBase64, fecha:new Date().toLocaleDateString()};
+  if(!aviso.titulo){ alert("Falta el título"); return; }
+  document.getElementById('msg').textContent="Publicando...";
+  let res=await fetch('/api/clasificados',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(aviso)});
+  if(res.ok){ document.getElementById('msg').textContent="✅ ¡Publicado!"; titulo.value=""; descripcion.value=""; telefono.value=""; precio.value=""; fotoBase64=""; document.getElementById('preview').style.display='none'; cargar(); }
+  else document.getElementById('msg').textContent="Error, intentá de nuevo";
+}
+cargar();
+</script></body></html>
