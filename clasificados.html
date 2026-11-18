@@ -1,38 +1,40 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Clasificados - Semanario</title>
-<style>
-body{font-family:Arial,sans-serif;margin:0;text-align:center}
-.titulo{background:#c1272d;color:white;padding:15px;font-size:24px;font-weight:bold;border-radius:10px;margin:15px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 15px}
-button{border:2px solid #c1272d;background:white;color:#c1272d;padding:18px 5px;font-size:18px;font-weight:bold;border-radius:12px}
-button.activo{background:#c1272d;color:white}
-#lista{padding:20px;text-align:left}
-.aviso{border:1px solid #ddd;border-radius:10px;padding:12px;margin-bottom:12px}
-</style>
-</head>
+<style>body{font-family:Arial,sans-serif;margin:0}.titulo{background:#c1272d;color:#fff;padding:20px;text-align:center;font-size:24px;font-weight:bold}.filtros{text-align:center;padding:12px}button{border:2px solid #c1272d;background:#fff;color:#c1272d;padding:8px 14px;margin:3px;border-radius:20px;cursor:pointer}button.activo{background:#c1272d;color:#fff}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;padding:16px}#lista{padding:0 16px 20px;text-align:center}.aviso{border:1px solid #ddd;border-radius:10px;padding:12px;text-align:left;overflow:hidden}.aviso img{width:100%;border-radius:8px;margin-bottom:8px}.aviso b{font-size:18px}.precio{color:#0a7a42;font-weight:bold;font-size:18px}.cat{background:#eee;padding:3px 8px;border-radius:10px;font-size:12px}.tel{display:inline-block;background:#25D366;color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;margin-top:8px}</style></head>
 <body>
-<h1>SEMANARIO</h1>
-<div class="titulo">AVISOS CLASIFICADOS</div>
-<div class="grid" id="categorias"></div>
-<p>Apreta una categoria para ver los avisos.</p>
-<div id="lista"></div>
-<a href="index.html">Volver al inicio</a>
+<div class="titulo">📢 CLASIFICADOS</div>
+<div class="filtros">
+<button class="activo" onclick="filtrar('Todos',this)">Todos</button>
+<button onclick="filtrar('Varios',this)">Varios</button>
+<button onclick="filtrar('Autos',this)">Autos</button>
+<button onclick="filtrar('Casas',this)">Casas</button>
+<button onclick="filtrar('Trabajo',this)">Trabajo</button>
+<button onclick="filtrar('Mascotas',this)">Mascotas</button>
+</div>
+<div id="lista">Cargando avisos...</div>
 <script>
-const cats=["Propiedades","Alquileres","Autos","Motos","Camiones y Maquinas","Empleos","Servicios","Mascotas","Varios","Agro"];
-const grid=document.getElementById("categorias");
-const lista=document.getElementById("lista");
-function mostrar(cat){
-document.querySelectorAll("#categorias button").forEach(b=>b.classList.toggle("activo",b.textContent===cat));
-const todos=JSON.parse(localStorage.getItem("clasificados")||"[]");
-const f=todos.filter(a=>a.categoria===cat);
-if(!f.length){lista.innerHTML="<p>Sin avisos en "+cat+"</p>";return;}
-lista.innerHTML=f.map(a=>"<div class='aviso'><b>"+a.titulo+"</b><br>"+a.texto+"</div>").join("");
+let todos=[];
+async function cargar(){
+  try{
+    let res=await fetch('/api/clasificados'); todos=await res.json();
+    mostrar('Todos');
+  }catch(e){ document.getElementById('lista').innerHTML="No se pudieron cargar los avisos"; }
 }
-cats.forEach(c=>{const b=document.createElement("button");b.textContent=c;b.onclick=()=>mostrar(c);grid.appendChild(b);});
-</script>
-</body>
-</html>
+function filtrar(cat,btn){
+  document.querySelectorAll('.filtros button').forEach(b=>b.classList.remove('activo'));
+  if(btn) btn.classList.add('activo');
+  mostrar(cat);
+}
+function mostrar(cat){
+  let lista=todos.filter(a=>cat==='Todos'||a.categoria===cat);
+  if(!lista.length){ document.getElementById('lista').innerHTML="<p>Todavía no hay avisos en esta categoría.</p>"; return; }
+  let html='<div class="grid">';
+  lista.forEach(a=>{
+    html+=`<div class="aviso">${a.foto?`<img src="${a.foto}">`:''}<span class="cat">${a.categoria||''}</span><br><b>${a.titulo||''}</b><br>${a.descripcion||''}<br><span class="precio">$${a.precio||''}</span><br>${a.telefono?`<a class="tel" href="https://wa.me/54${a.telefono.replace(/[^0-9]/g,'')}">📱 WhatsApp ${a.telefono}</a>`:''}</div>`;
+  });
+  html+='</div>';
+  document.getElementById('lista').innerHTML=html;
+}
+cargar();
+</script></body></html>
