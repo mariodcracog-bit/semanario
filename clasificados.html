@@ -35,7 +35,7 @@ b.className="boton"+(c==="Todos"?" activo":"");
 b.textContent=c;
 b.onclick=()=>{actual=c;document.querySelectorAll(".boton").forEach(x=>x.classList.remove("activo"));b.classList.add("activo");mostrar();};
 divBot.appendChild(b);});
-async function cargar(){try{const r=await fetch("/api/clasificados");todos=await r.json();}catch(e){todos=[];}mostrar();}
+async function cargar(){try{const r=await fetch("avisos.json");todos=await r.json();}catch(e){todos=[];}mostrar();}
 function mostrar(){
 const lista=document.getElementById("lista");
 const filtrados=actual==="Todos"?todos:todos.filter(a=>(a.categoria||"Varios")===actual);
