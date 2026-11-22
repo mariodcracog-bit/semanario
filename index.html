@@ -30,8 +30,31 @@ Yo Reparo de Computadora<br>
 <p>🛒 PUBLICIDAD LOCAL - RECONQUISTA</p>
 </div>
 <div class="filtros" id="filtros"></div><a class="snap" href="https://www.snapchat.com/add/mariodante2026">👻 Seguinos en Snapchat</a>
-<div class="wrap"><div id="noticias"></div></div><h2><a href="clasificados.html">CLASIFICADOS</a></h2><div id="avisos"><div id="avisos">Sin avisos</div><h2>📣 Publicidad</h2><div id="publi">Sin publicidad</div></div><footer>Semanario - Reconquista</footer>
+<div class="wrap"><div id="noticias"></div></div>
+  <h2><a href="clasificados.html">CLASIFICADOS</a></h2><div id="avisos"><div id="avisos">Sin avisos</div><h2>📣 Publicidad</h2><div id="publi">Sin publicidad</div></div><footer>Semanario - Reconquista</footer>
+<!-- VIDEOS -->
+<div style="background:white;padding:10px;margin:10px 0">
+<h2>🎥 VIDEOS</h2>
+<div id="videos">Cargando videos...</div>
+</div>
 <script>
+async function cargarVideos(){
+  try{
+    let r = await fetch('/api/videos');
+    let v = await r.json();
+    let c = document.getElementById('videos');
+    if(!v.length){ c.innerHTML='Todavía no hay videos.'; return; }
+    c.innerHTML = v.map(x=>{
+      let url = x.url || x.link || '';
+      let titulo = x.titulo || x.title || 'Video';
+      let emb = url.includes('watch?v=') ? url.replace('watch?v=','embed/') : url.includes('youtu.be/') ? url.replace('youtu.be/','www.youtube.com/embed/') : url;
+      return '<div style="margin-bottom:12px"><b>'+titulo+'</b><br><iframe width="100%" height="220" src="'+emb+'" frameborder="0" allowfullscreen></iframe></div>';
+    }).join('');
+  }catch(e){ document.getElementById('videos').innerHTML='No se pudieron cargar los videos.'; }
+}
+cargarVideos();
+</script>
+  <script>
 const NPOINT="https://api.npoint.io/ead0ae42a9f85435a3bd";
 const SECS=["Todos","Nacionales","Internacionales","Regionales","Locales","Policiales","Deporte"];
 let DATOS={noticias:[],avisos:[],publicidad:[]}; let ACTUAL="Todos";
