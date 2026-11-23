@@ -57,7 +57,7 @@ cargarVideos();
 </script>
   <script>
 const NPOINT="https://api.npoint.io/ead0ae42a9f85435a3bd";
-const SECS=["Todos","Nacionales","Internacionales","Regionales","Locales","Policiales","Deporte"];
+const SECS=["Todos","Nacionales","Internacionales","Regionales","Locales","Policiales","Deporte","Videos","Lenguaje"];
 let DATOS={noticias:[],avisos:[],publicidad:[]}; let ACTUAL="Todos";
 function hora(){const d=new Date();document.getElementById("fecha").textContent=d.toLocaleTimeString("es-AR")+" - "+d.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});}
 setInterval(hora,1000);hora();
