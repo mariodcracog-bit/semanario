@@ -41,6 +41,8 @@ Yo Reparo de Computadora<br>
 <script>
 async function cargarVideos(){
   try{
+   
+await new Promise(r=>setTimeout(r,2500)); 
     let r = await fetch('/api/videos');
     let v = await r.json();
     let c = document.getElementById('videos');
