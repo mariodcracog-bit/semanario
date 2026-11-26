@@ -1,68 +1,101 @@
-<!DOCTYPE html> 
-<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SEMANARIO - Reconquista</title>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEMANARIO DIGITAL - Reconquista</title>
 <style>
-*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:#f4f4f4}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f2f2f2;color:#222}
 header{background:#b91c1c;color:#fff;padding:14px;text-align:center}
-header h1{margin:0;font-size:28px}header p{margin:2px 0 0}
-.nav{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;padding:10px;background:#fff}
-.nav button{border:1px solid #ddd;background:#eee;padding:8px 12px;border-radius:20px;cursor:pointer}
-.nav button.active{background:#b91c1c;color:#fff}
-main{max-width:800px;margin:0 auto;padding:12px}
-.card{background:#fff;border-radius:10px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.1)}
-.badge{display:inline-block;background:#b91c1c;color:#fff;font-size:12px;padding:3px 8px;border-radius:10px}
-.admin-btn{display:block;text-align:center;margin:10px auto;padding:10px;background:#111;color:#fff;border-radius:8px;text-decoration:none;max-width:800px}
-input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:8px;font-size:16px}
-textarea{min-height:120px}.pub{background:#b91c1c;color:#fff;border:0;padding:12px;border-radius:8px;font-size:17px;width:100%;cursor:pointer}
-.del{background:#eee;border:0;padding:6px 10px;border-radius:6px;cursor:pointer}
-.hidden{display:none}
-</style></head>
+header h1{margin:0;font-size:30px;letter-spacing:1px}
+header p{margin:4px 0 0;font-size:14px}
+.topbar{background:#111;color:#fff;display:flex;justify-content:space-between;padding:8px 12px;font-size:13px;flex-wrap:wrap;gap:6px}
+.topbar a{color:#fde68a;text-decoration:none;font-weight:bold}
+.wrap{max-width:900px;margin:auto;padding:12px}
+.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card h2{margin:0 0 10px;font-size:19px;border-bottom:2px solid #eee;padding-bottom:6px}
+.clima{display:flex;justify-content:space-between;align-items:center;background:#e0f2fe}
+.clima b{font-size:32px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.pub{background:#fef3c7;border:2px dashed #f59e0b;text-align:center;padding:16px;border-radius:10px}
+.pub b{display:block;font-size:18px}.pub span{font-size:13px;color:#555}
+.clasi{border:1px solid #ddd;border-radius:10px;padding:10px}
+.clasi b{color:#b91c1c}.clasi small{color:#666}
+.noticia{border-bottom:1px solid #eee;padding:10px 0}
+.noticia:last-child{border:0}.noticia h3{margin:0 0 4px;color:#111}
+.noticia p{margin:0;color:#444;font-size:14px;line-height:1.5}
+.snap{background:#111;color:#fff;text-align:center}
+.snap a{display:inline-block;background:#fffc00;color:#111;padding:10px 18px;border-radius:999px;font-weight:bold;text-decoration:none;margin-top:8px}
+.btn{display:block;text-align:center;background:#111;color:#fff;padding:12px;border-radius:999px;text-decoration:none;margin-top:12px}
+footer{text-align:center;color:#777;font-size:12px;padding:16px}
+</style>
+</head>
 <body>
-<header><h1>📰 SEMANARIO</h1><p>Reconquista - Santa Fe - 25/11/2026</p></header>
-<div id="publico">
-<div class="nav" id="filtros"></div>
-<main id="lista"></main>
-<a class="admin-btn" href="#" onclick="mostrarAdmin();return false;">🔒 Ir al Admin</a>
+<header>
+<h1>📰 SEMANARIO DIGITAL</h1>
+<p>Reconquista - Santa Fe - Argentina</p>
+</header>
+
+<div class="topbar">
+<span id="fecha">📅 Cargando fecha...</span>
+<span>🌤️ Reconquista: <b>24°C - Soleado</b></span>
+<span><a href="https://www.snapchat.com" target="_blank">👻 Snapchat</a></span>
 </div>
-<div id="admin" class="hidden">
-<main><div class="card"><h2>SEMANARIO - ADMIN</h2>
-<label>Título</label><input id="titulo" placeholder="Título">
-<label>Categoría</label><select id="cat"><option>Locales</option><option>Regionales</option><option>Internacionales</option><option>Policiales</option><option>Deporte</option><option>Lenguaje</option><option>Videos</option></select>
-<label>Texto</label><textarea id="texto" placeholder="Escribí la noticia"></textarea>
-<button class="pub" onclick="publicar()">✅ PUBLICAR NOTICIA</button>
-<p><a href="#" onclick="mostrarPublico();return false;">← Volver al diario</a></p></div>
-<div class="card"><h3>Lo publicado</h3><div id="publicadas"></div></div>
-</main></div>
+
+<div class="wrap">
+
+<div class="card clima">
+<div><h2 style="border:0;margin:0">🌤️ El Clima Hoy</h2><p style="margin:4px 0 0;color:#444">Reconquista, Santa Fe<br>Máx 28° / Mín 16° - Sin lluvia</p></div>
+<div style="text-align:right"><b>24°</b><br><small>Humedad 55%<br>Viento 12 km/h</small></div>
+</div>
+
+<div class="card">
+<h2>📰 Noticias de Hoy</h2>
+<div class="noticia"><h3>Reconquista: nueva jornada en el centro</h3><p>Vecinos y comerciantes se preparan para un fin de semana con mucho movimiento en la zona céntrica. Ferias, actividades y ofertas locales.</p></div>
+<div class="noticia"><h3>El puerto y la producción regional</h3><p>La actividad productiva sigue siendo el motor de la región. Productores locales destacan el buen momento del campo y la industria.</p></div>
+<div class="noticia"><h3>Deportes: todo el fútbol del finde</h3><p>Se juega una nueva fecha de la Liga Reconquistense. Todos los partidos, horarios y canchas en la edición de este fin de semana.</p></div>
+<div class="noticia"><h3>Servicios y trámites</h3><p>Recordá que podés hacer tus trámites en el municipio de lunes a viernes. Llevá DNI y comprobante de domicilio.</p></div>
+</div>
+
+<div class="card">
+<h2>📢 Publicidad Local - Apoyá a los comercios de acá</h2>
+<div class="grid">
+<div class="pub"><b>🏪 TU COMERCIO ACÁ</b><span>Publicidad $ - Consultá por WhatsApp<br>Reconquista, Santa Fe</span></div>
+<div class="pub"><b>🍕 PIZZERÍA / ROTISERÍA</b><span>Tu anuncio acá<br>Pedidos y delivery</span></div>
+<div class="pub"><b>💈 PELUQUERÍA / BARBERÍA</b><span>Tu anuncio acá<br>Turnos y precios</span></div>
+<div class="pub"><b>🚗 TALLER / GOMERÍA</b><span>Tu anuncio acá<br>Atención todos los días</span></div>
+</div>
+<p style="font-size:13px;color:#666;text-align:center;margin:10px 0 0">¿Querés publicitar? Escribinos y te agregamos.</p>
+</div>
+
+<div class="card">
+<h2>📋 Avisos Clasificados</h2>
+<div class="grid">
+<div class="clasi"><b>🚗 VENDO AUTO</b><p>Auto en buen estado, papeles al día. Consultar precio y fotos.</p><small>📞 Contacto: tu teléfono acá</small></div>
+<div class="clasi"><b>🏠 ALQUILO CASA</b><p>Casa en Reconquista, 2 dormitorios, patio. Ideal familia.</p><small>📞 Contacto: tu teléfono acá</small></div>
+<div class="clasi"><b>🔧 OFREZCO TRABAJO</b><p>Se necesita ayudante, con o sin experiencia. Presentarse con DNI.</p><small>📞 Contacto: tu teléfono acá</small></div>
+<div class="clasi"><b>📱 VENDO CELULAR</b><p>Celular liberado, con cargador y funda. Poco uso.</p><small>📞 Contacto: tu teléfono acá</small></div>
+</div>
+</div>
+
+<div class="card snap">
+<h2 style="border:0">👻 Seguinos en Snapchat</h2>
+<p style="color:#ccc">Videos, detrás de cámara y noticias rápidas todos los días.</p>
+<a href="https://www.snapchat.com" target="_blank">Abrir Snapchat</a>
+<p style="font-size:12px;color:#999;margin-top:10px">También estamos en Facebook, Instagram y WhatsApp</p>
+</div>
+
+<a class="btn" href="https://wa.me/543482000000" target="_blank">📲 Mandar noticia o publicidad por WhatsApp</a>
+
+</div>
+<footer>Semanario Digital © 2026 - Reconquista, Santa Fe<br>Hecho con mucho esfuerzo para la gente de acá.</footer>
+
 <script>
-const KEY="semanario_noticias_v1";
-const CATS=["Todos","Locales","Regionales","Internacionales","Policiales","Deporte","Lenguaje","Videos"];
-let filtro="Todos";
-function leer(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]}}
-function guardar(n){localStorage.setItem(KEY,JSON.stringify(n))}
-function mostrarPublico(){document.getElementById('admin').classList.add('hidden');document.getElementById('publico').classList.remove('hidden');render();}
-function mostrarAdmin(){document.getElementById('publico').classList.add('hidden');document.getElementById('admin').classList.remove('hidden');renderAdmin();}
-function render(){
- const f=document.getElementById('filtros');f.innerHTML="";
- CATS.forEach(c=>{const b=document.createElement('button');b.textContent=c;b.className=c===filtro?'active':'';b.onclick=()=>{filtro=c;render()};f.appendChild(b)});
- const lista=document.getElementById('lista');
- const notas=leer().filter(n=>filtro==="Todos"||n.cat===filtro);
- if(!notas.length){lista.innerHTML='<div class="card"><b>No hay noticias en esta sección todavía</b><p>Publicá una desde el Admin.</p></div>';return}
- lista.innerHTML=notas.map(n=>`<div class="card"><span class="badge">${n.cat}</span><h2>${n.titulo}</h2><p>${n.texto}</p><small>${n.fecha}</small></div>`).join('');
-}
-function renderAdmin(){
- const d=document.getElementById('publicadas');const notas=leer();
- d.innerHTML=notas.length?notas.map((n,i)=>`<div style="border-top:1px solid #eee;padding:8px 0"><b>${n.cat} - ${n.titulo}</b><br>${n.texto}<br><small>${n.fecha}</small> <button class="del" onclick="borrar(${i})">Borrar</button></div>`).join(''):'<p>Todavía no publicaste nada.</p>';
-}
-function publicar(){
- const t=document.getElementById('titulo').value.trim();
- const x=document.getElementById('texto').value.trim();
- const c=document.getElementById('cat').value;
- if(!t){alert('Falta el Título');return}
- if(!x){alert('Falta el Texto');return}
- const notas=leer();notas.unshift({titulo:t,texto:x,cat:c,fecha:new Date().toLocaleString('es-AR')});guardar(notas);
- document.getElementById('titulo').value='';document.getElementById('texto').value='';
- renderAdmin();alert('¡Publicado! Ahora se ve en el diario.');mostrarPublico();
-}
-function borrar(i){if(confirm('¿Borrar esta noticia?')){const n=leer();n.splice(i,1);guardar(n);renderAdmin();render();}}
-render();
-</script></body></html>
+const d=new Date();
+const dias=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+const meses=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+document.getElementById("fecha").textContent="📅 "+dias[d.getDay()]+" "+d.getDate()+" de "+meses[d.getMonth()]+" de "+d.getFullYear();
+</script>
+</body>
+                                                                                                                                            </html>
