@@ -7,6 +7,90 @@
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f2f2f2;color:#222}
 header{background:#b91c1c;color:#fff;padding:14px;text-align:center}
+header h1{margin:0;font-size:30px}
+header p{margin:4px 0 0;font-size:14px}
+.topbar{background:#111;color:#fff;display:flex;justify-content:space-between;padding:8px 12px;font-size:13px;flex-wrap:wrap;gap:6px}
+.topbar a{color:#fde68a;text-decoration:none;font-weight:bold}
+nav{background:#fff;display:flex;gap:8px;overflow-x:auto;padding:10px;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px rgba(0,0,0,.1);white-space:nowrap}
+nav a{background:#111;color:#fff;padding:9px 14px;border-radius:999px;text-decoration:none;font-size:14px;font-weight:bold}
+nav a:nth-child(2){background:#b91c1c}nav a:nth-child(3){background:#2563eb}nav a:nth-child(4){background:#f59e0b;color:#111}nav a:nth-child(5){background:#059669}nav a:nth-child(6){background:#111}
+.wrap{max-width:900px;margin:auto;padding:12px}
+.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card h2{margin:0 0 10px;font-size:19px;border-bottom:2px solid #eee;padding-bottom:6px}
+.clima{display:flex;justify-content:space-between;align-items:center;background:#e0f2fe}
+.clima b{font-size:32px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.pub{background:#fef3c7;border:2px dashed #f59e0b;text-align:center;padding:16px;border-radius:10px}
+.pub b{display:block;font-size:18px}.pub span{font-size:13px;color:#555}
+.clasi{border:1px solid #ddd;border-radius:10px;padding:10px}
+.clasi b{color:#b91c1c}.clasi small{color:#666}
+.noticia{border-bottom:1px solid #eee;padding:10px 0}
+.noticia:last-child{border:0}.noticia h3{margin:0 0 4px}
+.noticia p{margin:0;color:#444;font-size:14px;line-height:1.5}
+.snap{background:#111;color:#fff;text-align:center}
+.snap a{display:inline-block;background:#fffc00;color:#111;padding:10px 18px;border-radius:999px;font-weight:bold;text-decoration:none;margin-top:8px}
+footer{text-align:center;color:#777;font-size:12px;padding:16px}
+</style>
+</head>
+<body>
+<header><h1>📰 SEMANARIO DIGITAL</h1><p>Reconquista - Santa Fe - Argentina</p></header>
+<div class="topbar"><span id="fecha">📅 Cargando fecha...</span><span>🌤️ Reconquista: <b>24°C - Soleado</b></span><span><a href="#snap">👻 Snapchat</a></span></div>
+
+<nav>
+<a href="#noticias">📰 Noticias</a>
+<a href="#deportes">⚽ Deportes</a>
+<a href="#publicidad">📢 Publicidad</a>
+<a href="#clasificados">📋 Clasificados</a>
+<a href="#clima">🌤️ Clima</a>
+<a href="#snap">👻 Snapchat</a>
+</nav>
+
+<div class="wrap">
+<div class="card clima" id="clima"><div><h2 style="border:0;margin:0">🌤️ El Clima Hoy</h2><p style="margin:4px 0 0;color:#444">Reconquista, Santa Fe<br>Máx 28° / Mín 16° - Sin lluvia</p></div><div style="text-align:right"><b>24°</b><br><small>Humedad 55%<br>Viento 12 km/h</small></div></div>
+
+<div class="card" id="noticias"><h2>📰 Noticias de Hoy</h2>
+<div class="noticia"><h3>Reconquista: nueva jornada en el centro</h3><p>Vecinos y comerciantes se preparan para un fin de semana con mucho movimiento en la zona céntrica. Ferias, actividades y ofertas locales.</p></div>
+<div class="noticia"><h3>El puerto y la producción regional</h3><p>La actividad productiva sigue siendo el motor de la región. Productores locales destacan el buen momento del campo y la industria.</p></div>
+<div class="noticia"><h3>Servicios y trámites</h3><p>Recordá que podés hacer tus trámites en el municipio de lunes a viernes. Llevá DNI y comprobante de domicilio.</p></div>
+</div>
+
+<div class="card" id="deportes"><h2>⚽ Deportes</h2>
+<div class="noticia"><h3>Todo el fútbol del finde</h3><p>Se juega una nueva fecha de la Liga Reconquistense. Todos los partidos, horarios y canchas en la edición de este fin de semana.</p></div>
+<div class="noticia"><h3>Otros deportes</h3><p>Básquet, vóley y atletismo local con actividad en toda la región.</p></div>
+</div>
+
+<div class="card" id="publicidad"><h2>📢 Publicidad Local</h2><div class="grid">
+<div class="pub"><b>🏪 TU COMERCIO ACÁ</b><span>Tu publicidad acá<br>Reconquista, Santa Fe</span></div>
+<div class="pub"><b>🍕 PIZZERÍA / ROTISERÍA</b><span>Tu anuncio acá<br>Pedidos y delivery</span></div>
+<div class="pub"><b>💈 PELUQUERÍA / BARBERÍA</b><span>Tu anuncio acá<br>Turnos y precios</span></div>
+<div class="pub"><b>🚗 TALLER / GOMERÍA</b><span>Tu anuncio acá<br>Atención todos los días</span></div>
+</div></div>
+
+<div class="card" id="clasificados"><h2>📋 Avisos Clasificados</h2><div class="grid">
+<div class="clasi"><b>🚗 VENDO AUTO</b><p>Auto en buen estado, papeles al día.</p><small>📞 Contacto: a completar</small></div>
+<div class="clasi"><b>🏠 ALQUILO CASA</b><p>Casa en Reconquista, 2 dormitorios, patio.</p><small>📞 Contacto: a completar</small></div>
+<div class="clasi"><b>🔧 OFREZCO TRABAJO</b><p>Se necesita ayudante, con o sin experiencia. Presentarse con DNI.</p><small>📞 Contacto: a completar</small></div>
+<div class="clasi"><b>📱 VENDO CELULAR</b><p>Celular liberado, con cargador y funda. Poco uso.</p><small>📞 Contacto: a completar</small></div>
+</div></div>
+
+<div class="card snap" id="snap"><h2 style="border:0">👻 Seguinos en Snapchat</h2><p style="color:#ccc">Videos, detrás de cámara y noticias rápidas todos los días.</p><a href="https://www.snapchat.com" target="_blank">Abrir Snapchat</a><p style="font-size:12px;color:#999;margin-top:10px">También estamos en Facebook e Instagram</p></div>
+</div>
+<footer>Semanario Digital © 2026 - Reconquista, Santa Fe<br>Hecho para la gente de acá.</footer>
+<script>
+const d=new Date();const dias=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];const meses=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+document.getElementById("fecha").textContent="📅 "+dias[d.getDay()]+" "+d.getDate()+" de "+meses[d.getMonth()]+" de "+d.getFullYear();
+</script>
+</body>
+</html> html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEMANARIO DIGITAL - Reconquista</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f2f2f2;color:#222}
+header{background:#b91c1c;color:#fff;padding:14px;text-align:center}
 header h1{margin:0;font-size:30px;letter-spacing:1px}
 header p{margin:4px 0 0;font-size:14px}
 .topbar{background:#111;color:#fff;display:flex;justify-content:space-between;padding:8px 12px;font-size:13px;flex-wrap:wrap;gap:6px}
